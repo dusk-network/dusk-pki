@@ -6,7 +6,7 @@ edition = "2018"
 
 [dependencies]
 poseidon252 = { git = "https://github.com/dusk-network/Poseidon252", tag = "v0.6.1"}
-dusk-jubjub = "0.3.6"
+dusk-jubjub = "0.3.7"
 hex = "^0.4"
 rand = "^0.7"
 sha2 = "0.8"
