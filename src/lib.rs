@@ -1,3 +1,6 @@
+// Copyright (c) DUSK NETWORK. All rights reserved.
+// Licensed under the MPL 2.0 license. See LICENSE file in the project root for details.
+
 //! ![Build Status](https://travis-ci.com/dusk-network/dusk-pki.svg?branch=master)](https://travis-ci.com/dusk-network/dusk-pki)
 //! ![Repository](https://dusk-network.github.io/dusk-pki/repo-badge.svg)](https://github.com/dusk-network/dusk-pki)
 //! ![Documentation](https://dusk-network.github.io/dusk-pki/badge.svg)](https://dusk-network.github.io/dusk-pki/index.html)
