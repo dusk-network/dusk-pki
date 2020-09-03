@@ -29,8 +29,6 @@ pub enum Error {
 
 impl From<Error> for io::Error {
     fn from(err: Error) -> io::Error {
-        match err {
-            _ => io::Error::new(io::ErrorKind::Other, format!("{}", err)),
-        }
+        io::Error::new(io::ErrorKind::Other, format!("{}", err))
     }
 }

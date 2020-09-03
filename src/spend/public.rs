@@ -125,7 +125,7 @@ impl fmt::LowerHex for PublicKey {
             write!(f, "0x")?
         }
 
-        &bytes[..].iter().for_each(|byte| {
+        bytes[..].iter().for_each(|byte| {
             write!(f, "{:02X}", &byte)
                 .expect("Unexpected problem while writing bytes.")
         });
@@ -141,7 +141,7 @@ impl fmt::UpperHex for PublicKey {
             write!(f, "0x")?
         }
 
-        &bytes[..].iter().for_each(|byte| {
+        bytes[..].iter().for_each(|byte| {
             write!(f, "{:02X}", &byte)
                 .expect("Unexpected problem while writing bytes.")
         });
