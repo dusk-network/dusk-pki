@@ -114,7 +114,7 @@ impl fmt::LowerHex for SecretKey {
             write!(f, "0x")?
         }
 
-        for byte in &bytes {
+        for byte in &bytes[..] {
             write!(f, "{:02x}", &byte)?
         }
         Ok(())
@@ -129,7 +129,7 @@ impl fmt::UpperHex for SecretKey {
             write!(f, "0x")?
         }
 
-        for byte in &bytes {
+        for byte in &bytes[..] {
             write!(f, "{:02X}", &byte)?
         }
         Ok(())
