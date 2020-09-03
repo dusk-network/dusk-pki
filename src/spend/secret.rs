@@ -64,15 +64,15 @@ impl SecretKey {
 
     /// Derive the secret to deterministically construct a [`PublicKey`]
     pub fn public_key(&self) -> PublicKey {
-        let A = GENERATOR_EXTENDED * &self.a;
-        let B = GENERATOR_EXTENDED * &self.b;
+        let A = GENERATOR_EXTENDED * self.a;
+        let B = GENERATOR_EXTENDED * self.b;
 
         PublicKey::new(A, B)
     }
 
     /// Derive the secret to deterministically construct a [`ViewKey`]
     pub fn view_key(&self) -> ViewKey {
-        let B = GENERATOR_EXTENDED * &self.b;
+        let B = GENERATOR_EXTENDED * self.b;
 
         ViewKey::new(self.a, B)
     }
@@ -81,8 +81,8 @@ impl SecretKey {
 impl From<&SecretKey> for [u8; 64] {
     fn from(pk: &SecretKey) -> Self {
         let mut bytes = [0u8; 64];
-        bytes[..32].copy_from_slice(&JubJubScalar::from(pk.a).to_bytes()[..]);
-        bytes[32..].copy_from_slice(&JubJubScalar::from(pk.b).to_bytes()[..]);
+        bytes[..32].copy_from_slice(&pk.a.to_bytes()[..]);
+        bytes[32..].copy_from_slice(&pk.b.to_bytes()[..]);
         bytes
     }
 }
@@ -114,7 +114,7 @@ impl fmt::LowerHex for SecretKey {
             write!(f, "0x")?
         }
 
-        &bytes[..].iter().for_each(|byte| {
+        bytes[..].iter().for_each(|byte| {
             write!(f, "{:02X}", &byte)
                 .expect("Unexpected problem while writing bytes.")
         });
@@ -130,7 +130,7 @@ impl fmt::UpperHex for SecretKey {
             write!(f, "0x")?
         }
 
-        &bytes[..].iter().for_each(|byte| {
+        bytes[..].iter().for_each(|byte| {
             write!(f, "{:02X}", &byte)
                 .expect("Unexpected problem while writing bytes.")
         });

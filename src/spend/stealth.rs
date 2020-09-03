@@ -11,7 +11,7 @@ use subtle::{Choice, ConstantTimeEq};
 /// ownership.
 pub trait Ownable {
     /// Returns the associated `StealthAddress`
-    fn stealth_address<'a>(&'a self) -> &'a StealthAddress;
+    fn stealth_address(&self) -> &StealthAddress;
 }
 
 //. To obfuscate the identity of the participants, we utilizes a Stealth Address
@@ -121,7 +121,7 @@ impl fmt::LowerHex for StealthAddress {
             write!(f, "0x")?
         }
 
-        &bytes[..].iter().for_each(|byte| {
+        bytes[..].iter().for_each(|byte| {
             write!(f, "{:02X}", &byte)
                 .expect("Unexpected problem while writing bytes.")
         });
@@ -137,7 +137,7 @@ impl fmt::UpperHex for StealthAddress {
             write!(f, "0x")?
         }
 
-        &bytes[..].iter().for_each(|byte| {
+        bytes[..].iter().for_each(|byte| {
             write!(f, "{:02X}", &byte)
                 .expect("Unexpected problem while writing bytes.")
         });

@@ -53,7 +53,7 @@ impl ViewKey {
 
     /// Derive the secret to deterministically construct a [`PublicSpendKey`]
     pub fn public_key(&self) -> PublicSpendKey {
-        let A = GENERATOR_EXTENDED * &self.a;
+        let A = GENERATOR_EXTENDED * self.a;
 
         PublicSpendKey::new(A, self.B)
     }
@@ -74,7 +74,7 @@ impl ViewKey {
 
         let aR = sa.R() * self.a();
         let aR = sponge::hash(&aR);
-        let aR = GENERATOR_EXTENDED * &aR;
+        let aR = GENERATOR_EXTENDED * aR;
         let pk_r = aR + self.B();
 
         sa.pk_r() == &pk_r
@@ -133,7 +133,7 @@ impl fmt::LowerHex for ViewKey {
             write!(f, "0x")?
         }
 
-        &bytes[..].iter().for_each(|byte| {
+        bytes[..].iter().for_each(|byte| {
             write!(f, "{:02X}", &byte)
                 .expect("Unexpected problem while writing bytes.")
         });
@@ -149,7 +149,7 @@ impl fmt::UpperHex for ViewKey {
             write!(f, "0x")?
         }
 
-        &bytes[..].iter().for_each(|byte| {
+        bytes[..].iter().for_each(|byte| {
             write!(f, "{:02X}", &byte)
                 .expect("Unexpected problem while writing bytes.")
         });
