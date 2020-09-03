@@ -114,9 +114,10 @@ impl fmt::LowerHex for SecretKey {
             write!(f, "0x")?
         }
 
-        for byte in &bytes {
-            write!(f, "{:02x}", &byte)?
-        }
+        &bytes[..].iter().for_each(|byte| {
+            write!(f, "{:02X}", &byte)
+                .expect("Unexpected problem while writing bytes.")
+        });
         Ok(())
     }
 }
@@ -129,9 +130,10 @@ impl fmt::UpperHex for SecretKey {
             write!(f, "0x")?
         }
 
-        for byte in &bytes {
-            write!(f, "{:02X}", &byte)?
-        }
+        &bytes[..].iter().for_each(|byte| {
+            write!(f, "{:02X}", &byte)
+                .expect("Unexpected problem while writing bytes.")
+        });
         Ok(())
     }
 }
