@@ -25,7 +25,7 @@ pub struct StealthAddress {
 }
 
 impl Ownable for StealthAddress {
-    fn stealth_address<'a>(&'a self) -> &'a StealthAddress {
+    fn stealth_address(&self) -> &StealthAddress {
         &self
     }
 }
