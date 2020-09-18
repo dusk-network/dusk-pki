@@ -1,5 +1,6 @@
 // Copyright (c) DUSK NETWORK. All rights reserved.
-// Licensed under the MPL 2.0 license. See LICENSE file in the project root for details.
+// Licensed under the MPL 2.0 license. See LICENSE file in the project root for
+// details.
 
 use super::public::PublicKey;
 use super::stealth::StealthAddress;
@@ -114,10 +115,9 @@ impl fmt::LowerHex for SecretKey {
             write!(f, "0x")?
         }
 
-        bytes[..].iter().for_each(|byte| {
-            write!(f, "{:02X}", &byte)
-                .expect("Unexpected problem while writing bytes.")
-        });
+        for byte in &bytes {
+            write!(f, "{:02x}", &byte)?
+        }
         Ok(())
     }
 }
@@ -130,10 +130,9 @@ impl fmt::UpperHex for SecretKey {
             write!(f, "0x")?
         }
 
-        bytes[..].iter().for_each(|byte| {
-            write!(f, "{:02X}", &byte)
-                .expect("Unexpected problem while writing bytes.")
-        });
+        for byte in &bytes {
+            write!(f, "{:02X}", &byte)?
+        }
         Ok(())
     }
 }
