@@ -5,7 +5,7 @@ authors = ["zer0 <matteo@dusk.network>", "Victor Lopez <victor@dusk.network"]
 edition = "2018"
 
 [dependencies]
-poseidon252 = { git = "https://github.com/dusk-network/Poseidon252", tag = "v0.6.3"}
+poseidon252 = { git = "https://github.com/dusk-network/Poseidon252", tag = "v0.8.0"}
 dusk-jubjub = "0.3.7"
 hex = "^0.4"
 rand = "^0.7"
