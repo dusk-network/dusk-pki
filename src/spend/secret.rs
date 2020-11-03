@@ -18,9 +18,14 @@ use rand::rngs::StdRng;
 use rand::SeedableRng;
 use rand::{CryptoRng, RngCore};
 use sha2::{Digest, Sha256};
+#[cfg(feature = "canon")]
+use canonical::Canon;
+#[cfg(feature = "canon")]
+use canonical_derive::Canon;
 
 /// Secret pair of `a` and `b`
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[cfg_attr(feature = "canon", derive(Canon))]
 pub struct SecretKey {
     a: JubJubScalar,
     b: JubJubScalar,
