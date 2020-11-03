@@ -1,17 +1,19 @@
 [package]
 name = "dusk-pki"
-version = "0.2.0"
+version = "0.2.1"
 authors = ["zer0 <matteo@dusk.network>", "Victor Lopez <victor@dusk.network"]
 edition = "2018"
 
 [dependencies]
-poseidon252 = { git = "https://github.com/dusk-network/Poseidon252"}
-dusk-jubjub = "^0.3.10"
+poseidon252 = { git = "https://github.com/dusk-network/Poseidon252", tag = "v0.12.0"}
+dusk-jubjub = "0.3.11"
 hex = "^0.4"
 rand = "^0.7"
 sha2 = "0.8"
 anyhow = "1.0"
 thiserror = "1.0"
+canonical = "0.4"
+canonical_derive = "0.4"
 
 [dependencies.subtle]
 version = "^2.2.1"
