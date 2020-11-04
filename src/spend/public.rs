@@ -12,14 +12,14 @@ use crate::{
     decode::decode, Error, JubJubAffine, JubJubExtended, JubJubScalar,
 };
 
-use dusk_jubjub::GENERATOR_EXTENDED;
-use std::convert::TryFrom;
-use std::fmt;
-use subtle::{Choice, ConstantTimeEq};
 #[cfg(feature = "canon")]
 use canonical::Canon;
 #[cfg(feature = "canon")]
 use canonical_derive::Canon;
+use dusk_jubjub::GENERATOR_EXTENDED;
+use std::convert::TryFrom;
+use std::fmt;
+use subtle::{Choice, ConstantTimeEq};
 
 /// Public pair of `a·G` and `b·G`
 #[derive(Debug, Clone, Copy)]
