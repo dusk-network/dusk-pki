@@ -12,6 +12,10 @@ use crate::{
     decode::decode, Error, JubJubAffine, JubJubExtended, JubJubScalar,
 };
 
+#[cfg(feature = "canon")]
+use canonical::Canon;
+#[cfg(feature = "canon")]
+use canonical_derive::Canon;
 use dusk_jubjub::GENERATOR_EXTENDED;
 use std::convert::TryFrom;
 use std::fmt;
@@ -19,6 +23,7 @@ use subtle::{Choice, ConstantTimeEq};
 
 /// Public pair of `a·G` and `b·G`
 #[derive(Debug, Clone, Copy)]
+#[cfg_attr(feature = "canon", derive(Canon))]
 pub struct PublicKey {
     A: JubJubExtended,
     B: JubJubExtended,
