@@ -35,6 +35,6 @@ mod sponge;
 mod view;
 
 use dusk_jubjub::{
-    AffinePoint as JubJubAffine, ExtendedPoint as JubJubExtended,
-    Fr as JubJubScalar,
+    JubJubAffine, JubJubExtended,
+    JubJubScalar,
 };
