@@ -33,7 +33,7 @@ fn keys_encoding() -> anyhow::Result<()> {
 
 #[test]
 fn keys_consistency() {
-    use dusk_jubjub::{Fr as JubJubScalar, GENERATOR_EXTENDED};
+    use dusk_jubjub::{JubJubScalar, GENERATOR_EXTENDED};
 
     let r = JubJubScalar::random(&mut rand::thread_rng());
     let ssk = SecretSpendKey::default();

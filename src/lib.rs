@@ -34,7 +34,4 @@ mod spend;
 mod sponge;
 mod view;
 
-use dusk_jubjub::{
-    AffinePoint as JubJubAffine, ExtendedPoint as JubJubExtended,
-    Fr as JubJubScalar,
-};
+use dusk_jubjub::{JubJubAffine, JubJubExtended, JubJubScalar};
