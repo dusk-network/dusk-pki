@@ -4,37 +4,30 @@
 //
 // Copyright (c) DUSK NETWORK. All rights reserved.
 
+use crate::{permutation, JubJubScalar, ViewKey};
+
 use super::public::PublicKey;
 use super::stealth::StealthAddress;
-
-use crate::sponge;
-use crate::{JubJubScalar, ViewKey};
-
-use dusk_jubjub::GENERATOR_EXTENDED;
-
-use std::fmt;
 
 #[cfg(feature = "canon")]
 use canonical::Canon;
 #[cfg(feature = "canon")]
 use canonical_derive::Canon;
-use rand::rngs::StdRng;
+
+use dusk_jubjub::GENERATOR_EXTENDED;
+use rand_core::{CryptoRng, RngCore};
+
+use core::fmt;
+
+#[cfg(feature = "std")]
 use rand::SeedableRng;
-use rand::{CryptoRng, RngCore};
-use sha2::{Digest, Sha256};
 
 /// Secret pair of `a` and `b`
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Default, Clone, Copy, PartialEq, Eq)]
 #[cfg_attr(feature = "canon", derive(Canon))]
 pub struct SecretKey {
     a: JubJubScalar,
     b: JubJubScalar,
-}
-
-impl Default for SecretKey {
-    fn default() -> Self {
-        SecretKey::random(&mut rand::thread_rng())
-    }
 }
 
 impl SecretKey {
@@ -54,13 +47,6 @@ impl SecretKey {
         &self.b
     }
 
-    /// Generate a `sk_r = H(a · R) + b`
-    pub fn sk_r(&self, sa: &StealthAddress) -> JubJubScalar {
-        let aR = sa.R() * self.a;
-        let aR = sponge::hash(&aR);
-        aR + self.b
-    }
-
     /// Deterministically create a new [`SecretKey`] from a random number
     /// generator
     pub fn random<R: RngCore + CryptoRng>(rng: &mut R) -> Self {
@@ -68,6 +54,14 @@ impl SecretKey {
         let b = JubJubScalar::random(rng);
 
         SecretKey::new(a, b)
+    }
+
+    /// Generate a `sk_r = H(a · R) + b`
+    pub fn sk_r(&self, sa: &StealthAddress) -> JubJubScalar {
+        let aR = sa.R() * self.a;
+        let aR = permutation::hash(&aR);
+
+        aR + self.b
     }
 
     /// Derive the secret to deterministically construct a [`PublicKey`]
@@ -95,8 +89,12 @@ impl From<&SecretKey> for [u8; 64] {
     }
 }
 
+#[cfg(feature = "std")]
 impl From<&[u8]> for SecretKey {
     fn from(bytes: &[u8]) -> Self {
+        use rand::rngs::StdRng;
+        use sha2::{Digest, Sha256};
+
         let mut hasher = Sha256::default();
         hasher.input(bytes);
         let bytes = hasher.result();
@@ -108,6 +106,7 @@ impl From<&[u8]> for SecretKey {
     }
 }
 
+#[cfg(feature = "std")]
 impl From<String> for SecretKey {
     fn from(s: String) -> Self {
         Self::from(s.into_bytes().as_slice())

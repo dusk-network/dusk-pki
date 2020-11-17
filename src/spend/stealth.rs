@@ -10,16 +10,11 @@ use crate::{decode::decode, Error, JubJubAffine, JubJubExtended};
 use canonical::Canon;
 #[cfg(feature = "canon")]
 use canonical_derive::Canon;
-use std::convert::{TryFrom, TryInto};
-use std::fmt;
+
 use subtle::{Choice, ConstantTimeEq};
 
-/// The trait `Ownable` is required by any type that wants to prove its
-/// ownership.
-pub trait Ownable {
-    /// Returns the associated `StealthAddress`
-    fn stealth_address(&self) -> &StealthAddress;
-}
+use core::convert::{TryFrom, TryInto};
+use core::fmt;
 
 //. To obfuscate the identity of the participants, we utilizes a Stealth Address
 //. system.
@@ -32,9 +27,37 @@ pub struct StealthAddress {
     pub(crate) pk_r: JubJubExtended,
 }
 
+/// The trait `Ownable` is required by any type that wants to prove its
+/// ownership.
+pub trait Ownable {
+    /// Returns the associated `StealthAddress`
+    fn stealth_address(&self) -> &StealthAddress;
+}
+
 impl Ownable for StealthAddress {
     fn stealth_address(&self) -> &StealthAddress {
         &self
+    }
+}
+
+impl From<&StealthAddress> for [u8; 64] {
+    fn from(sa: &StealthAddress) -> [u8; 64] {
+        let mut bytes = [0u8; 64];
+        bytes[..32].copy_from_slice(&JubJubAffine::from(sa.R).to_bytes()[..]);
+        bytes[32..]
+            .copy_from_slice(&JubJubAffine::from(sa.pk_r).to_bytes()[..]);
+        bytes
+    }
+}
+
+impl TryFrom<&[u8; 64]> for StealthAddress {
+    type Error = Error;
+
+    fn try_from(bytes: &[u8; 64]) -> Result<Self, Self::Error> {
+        let R = JubJubExtended::from(decode::<JubJubAffine>(&bytes[..32])?);
+        let pk_r = JubJubExtended::from(decode::<JubJubAffine>(&bytes[32..])?);
+
+        Ok(StealthAddress { R, pk_r })
     }
 }
 
@@ -77,50 +100,6 @@ impl PartialEq for StealthAddress {
     }
 }
 
-impl From<&StealthAddress> for [u8; 64] {
-    fn from(sa: &StealthAddress) -> [u8; 64] {
-        let mut bytes = [0u8; 64];
-        bytes[..32].copy_from_slice(&JubJubAffine::from(sa.R).to_bytes()[..]);
-        bytes[32..]
-            .copy_from_slice(&JubJubAffine::from(sa.pk_r).to_bytes()[..]);
-        bytes
-    }
-}
-
-impl TryFrom<&[u8; 64]> for StealthAddress {
-    type Error = Error;
-
-    fn try_from(bytes: &[u8; 64]) -> Result<Self, Self::Error> {
-        let R = JubJubExtended::from(decode::<JubJubAffine>(&bytes[..32])?);
-        let pk_r = JubJubExtended::from(decode::<JubJubAffine>(&bytes[32..])?);
-
-        Ok(StealthAddress { R, pk_r })
-    }
-}
-
-impl TryFrom<String> for StealthAddress {
-    type Error = Error;
-
-    fn try_from(s: String) -> Result<Self, Self::Error> {
-        if s.len() != 128 {
-            return Err(Error::BadLength {
-                found: s.len(),
-                expected: 128,
-            });
-        }
-
-        let s = s.as_str();
-
-        let R = hex::decode(&s[..64]).map_err(|_| Error::InvalidPoint)?;
-        let R = JubJubExtended::from(decode::<JubJubAffine>(&R[..])?);
-
-        let pk_r = hex::decode(&s[64..]).map_err(|_| Error::InvalidPoint)?;
-        let pk_r = JubJubExtended::from(decode::<JubJubAffine>(&pk_r[..])?);
-
-        Ok(StealthAddress { R, pk_r })
-    }
-}
-
 impl fmt::LowerHex for StealthAddress {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         let bytes: [u8; 64] = self.into();
@@ -156,5 +135,29 @@ impl fmt::UpperHex for StealthAddress {
 impl fmt::Display for StealthAddress {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f, "{:x}", self)
+    }
+}
+
+#[cfg(feature = "std")]
+impl TryFrom<String> for StealthAddress {
+    type Error = Error;
+
+    fn try_from(s: String) -> Result<Self, Self::Error> {
+        if s.len() != 128 {
+            return Err(Error::BadLength {
+                found: s.len(),
+                expected: 128,
+            });
+        }
+
+        let s = s.as_str();
+
+        let R = hex::decode(&s[..64]).map_err(|_| Error::InvalidPoint)?;
+        let R = JubJubExtended::from(decode::<JubJubAffine>(&R[..])?);
+
+        let pk_r = hex::decode(&s[64..]).map_err(|_| Error::InvalidPoint)?;
+        let pk_r = JubJubExtended::from(decode::<JubJubAffine>(&pk_r[..])?);
+
+        Ok(StealthAddress { R, pk_r })
     }
 }

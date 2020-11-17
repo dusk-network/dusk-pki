@@ -5,9 +5,21 @@
 // Copyright (c) DUSK NETWORK. All rights reserved.
 
 use crate::{JubJubExtended, JubJubScalar};
-use poseidon252::sponge::sponge::sponge_hash;
+
+use dusk_bls12_381::BlsScalar;
+use hades252::{ScalarStrategy, Strategy};
+
+use core::cmp;
 
 /// Hashes a JubJub's ExtendedPoint into a JubJub's Scalar
 pub fn hash(p: &JubJubExtended) -> JubJubScalar {
-    JubJubScalar::from_raw(sponge_hash(&p.to_hash_inputs()).reduce().0)
+    let mut perm = [BlsScalar::zero(); hades252::WIDTH];
+    let p = p.to_hash_inputs();
+
+    let n = cmp::min(hades252::WIDTH, p.len());
+
+    perm[0..n].copy_from_slice(&p[0..n]);
+    ScalarStrategy::new().perm(&mut perm);
+
+    JubJubScalar::from_raw(perm[1].reduce().0)
 }

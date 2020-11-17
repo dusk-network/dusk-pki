@@ -5,17 +5,19 @@
 // Copyright (c) DUSK NETWORK. All rights reserved.
 
 use crate::spend::stealth;
-use crate::sponge;
-
+#[cfg(feature = "std")]
+use crate::Error;
 use crate::{
-    decode::decode, Error, JubJubAffine, JubJubExtended, JubJubScalar,
-    PublicSpendKey, SecretSpendKey,
+    permutation, JubJubAffine, JubJubExtended, JubJubScalar, PublicSpendKey,
+    SecretSpendKey,
 };
 
 use dusk_jubjub::GENERATOR_EXTENDED;
-use std::convert::TryFrom;
-use std::fmt;
 use subtle::{Choice, ConstantTimeEq};
+
+#[cfg(feature = "std")]
+use core::convert::TryFrom;
+use core::fmt;
 
 /// Pair of a secret `a` and public `b·G`
 ///
@@ -29,6 +31,7 @@ pub struct ViewKey {
 
 impl ConstantTimeEq for ViewKey {
     fn ct_eq(&self, other: &Self) -> Choice {
+        // TODO - Why self.a is not checked?
         self.B.ct_eq(&other.B)
     }
 }
@@ -76,7 +79,7 @@ impl ViewKey {
         let sa = owner.stealth_address();
 
         let aR = sa.R() * self.a();
-        let aR = sponge::hash(&aR);
+        let aR = permutation::hash(&aR);
         let aR = GENERATOR_EXTENDED * aR;
         let pk_r = aR + self.B();
 
@@ -105,10 +108,13 @@ impl From<&ViewKey> for [u8; 64] {
     }
 }
 
+#[cfg(feature = "std")]
 impl TryFrom<String> for ViewKey {
     type Error = Error;
 
     fn try_from(s: String) -> Result<Self, Self::Error> {
+        use crate::decode::decode;
+
         if s.len() != 128 {
             return Err(Error::BadLength {
                 found: s.len(),

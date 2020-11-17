@@ -4,22 +4,25 @@
 //
 // Copyright (c) DUSK NETWORK. All rights reserved.
 
-use super::secret::SecretKey;
-use super::stealth::StealthAddress;
-
-use crate::sponge;
+#[cfg(feature = "std")]
+use crate::Error;
 use crate::{
-    decode::decode, Error, JubJubAffine, JubJubExtended, JubJubScalar,
+    permutation, JubJubAffine, JubJubExtended, JubJubScalar, StealthAddress,
 };
+
+use super::secret::SecretKey;
 
 #[cfg(feature = "canon")]
 use canonical::Canon;
 #[cfg(feature = "canon")]
 use canonical_derive::Canon;
+
 use dusk_jubjub::GENERATOR_EXTENDED;
-use std::convert::TryFrom;
-use std::fmt;
 use subtle::{Choice, ConstantTimeEq};
+
+#[cfg(feature = "std")]
+use core::convert::TryFrom;
+use core::fmt;
 
 /// Public pair of `a·G` and `b·G`
 #[derive(Debug, Clone, Copy)]
@@ -52,7 +55,7 @@ impl PublicKey {
         let R = G * r;
 
         let rA = self.A * r;
-        let rA = sponge::hash(&rA);
+        let rA = permutation::hash(&rA);
         let rA = G * rA;
 
         let pk_r = rA + self.B;
@@ -102,10 +105,13 @@ impl From<&PublicKey> for [u8; 64] {
     }
 }
 
+#[cfg(feature = "std")]
 impl TryFrom<String> for PublicKey {
     type Error = Error;
 
     fn try_from(s: String) -> Result<Self, Self::Error> {
+        use crate::decode::decode;
+
         if s.len() != 128 {
             return Err(Error::BadLength {
                 found: s.len(),

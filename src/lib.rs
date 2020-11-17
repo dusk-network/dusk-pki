@@ -13,10 +13,12 @@
 //! This repository has been created so there's a unique library that holds the
 //! types and functions required to perform keys operations.
 
+#![cfg_attr(not(feature = "std"), no_std)]
 #![deny(missing_docs)]
 #![allow(non_snake_case)]
 
 pub use decode::decode as jubjub_decode;
+
 /// PKI Errors
 pub use errors::Error;
 /// Public Spend Key
@@ -30,8 +32,8 @@ pub use view::ViewKey;
 
 mod decode;
 mod errors;
+mod permutation;
 mod spend;
-mod sponge;
 mod view;
 
 use dusk_jubjub::{JubJubAffine, JubJubExtended, JubJubScalar};
