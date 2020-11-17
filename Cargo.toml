@@ -1,23 +1,35 @@
 [package]
 name = "dusk-pki"
-version = "0.3.1"
+version = "0.4.0"
 authors = ["zer0 <matteo@dusk.network>", "Victor Lopez <victor@dusk.network"]
 edition = "2018"
 
 [dependencies]
-poseidon252 = { git = "https://github.com/dusk-network/Poseidon252", tag = "v0.13.2"}
-dusk-jubjub = "0.5"
+rand_core = "0.5.1"
+dusk-bls12_381 = {version = "0.3", default-features = false}
+dusk-jubjub = {version = "0.5", default-features = false}
+hades252 = {git = "https://github.com/dusk-network/hades252", tag = "v0.10.1", default-features = false}
+hex = {version = "^0.4", default-features = false}
+subtle = {version = "^2.2.1", default-features = false}
 canonical = {version = "0.4", optional = true}
 canonical_derive = {version = "0.4", optional = true}
-hex = "^0.4"
-rand = "^0.7"
-sha2 = "0.8"
-anyhow = "1.0"
-thiserror = "1.0"
-
-[dependencies.subtle]
-version = "^2.2.1"
-default-features = false
+rand = {version = "0.7", optional = true}
+sha2 = {version = "0.8", optional = true}
 
 [features]
-canon = ["canonical", "canonical_derive", "dusk-jubjub/canon", "poseidon252/canon"]
+default = ["std"]
+std = [
+    "dusk-jubjub/default",
+    "dusk-bls12_381/default",
+    "hades252/default",
+    "subtle/default",
+    "hex/default",
+    "rand/default",
+    "sha2/default"
+]
+canon = [
+    "canonical",
+    "canonical_derive",
+    "dusk-bls12_381/canon",
+    "dusk-jubjub/canon"
+]
