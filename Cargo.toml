@@ -1,6 +1,6 @@
 [package]
 name = "dusk-pki"
-version = "0.4.0"
+version = "0.4.1"
 authors = ["zer0 <matteo@dusk.network>", "Victor Lopez <victor@dusk.network"]
 edition = "2018"
 
@@ -8,7 +8,7 @@ edition = "2018"
 rand_core = "0.5.1"
 dusk-bls12_381 = {version = "0.3", default-features = false}
 dusk-jubjub = {version = "0.5", default-features = false}
-hades252 = {git = "https://github.com/dusk-network/hades252", tag = "v0.10.1", default-features = false}
+poseidon252 = {git = "https://github.com/dusk-network/Poseidon252", tag = "v0.14.1", default-features = false}
 hex = {version = "^0.4", default-features = false}
 subtle = {version = "^2.2.1", default-features = false}
 canonical = {version = "0.4", optional = true}
@@ -21,7 +21,7 @@ default = ["std"]
 std = [
     "dusk-jubjub/default",
     "dusk-bls12_381/default",
-    "hades252/default",
+    "poseidon252/default",
     "subtle/default",
     "hex/default",
     "rand/default",
