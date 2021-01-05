@@ -4,7 +4,7 @@
 //
 // Copyright (c) DUSK NETWORK. All rights reserved.
 
-use crate::spend::stealth;
+use crate::keys::spend::stealth;
 
 use crate::Error;
 use crate::{

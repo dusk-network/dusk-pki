@@ -9,6 +9,8 @@ use core::fmt;
 /// Errors for Dusk PKI
 #[derive(Copy, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
 pub enum Error {
+    /// Invalid Scalar
+    InvalidScalar,
     /// Invalid Compressed Point"
     InvalidPoint,
     /// Invalid Parameters

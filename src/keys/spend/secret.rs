@@ -19,7 +19,7 @@ use rand_core::{CryptoRng, RngCore};
 
 use core::fmt;
 
-/// Secret pair of `a` and `b`
+/// Secret pair of `a` and `b` defining a [`SecretSpendKey`]
 #[derive(Debug, Default, Clone, Copy, PartialEq, Eq)]
 #[cfg_attr(feature = "canon", derive(Canon))]
 pub struct SecretSpendKey {

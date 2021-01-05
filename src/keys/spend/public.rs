@@ -20,7 +20,7 @@ use subtle::{Choice, ConstantTimeEq};
 use core::convert::TryFrom;
 use core::fmt;
 
-/// Public pair of `a·G` and `b·G`
+/// Public pair of `a·G` and `b·G` defining a [`PublicSpendKey`]
 #[derive(Debug, Clone, Copy)]
 #[cfg_attr(feature = "canon", derive(Canon))]
 pub struct PublicSpendKey {

@@ -21,19 +21,24 @@ pub use decode::decode as jubjub_decode;
 
 /// PKI Errors
 pub use errors::Error;
+
+/// Public Key
+pub use keys::public::PublicKey;
+/// Secret Key
+pub use keys::secret::SecretKey;
 /// Public Spend Key
-pub use spend::public::PublicSpendKey;
+pub use keys::spend::public::PublicSpendKey;
 /// Secret Spend Key
-pub use spend::secret::SecretSpendKey;
+pub use keys::spend::secret::SecretSpendKey;
 /// Stealth Address
-pub use spend::stealth::{Ownable, StealthAddress};
+pub use keys::spend::stealth::{Ownable, StealthAddress};
 /// ViewKey
 pub use view::ViewKey;
 
 mod decode;
 mod errors;
+mod keys;
 mod permutation;
-mod spend;
 mod view;
 
 use dusk_jubjub::{JubJubAffine, JubJubExtended, JubJubScalar};
