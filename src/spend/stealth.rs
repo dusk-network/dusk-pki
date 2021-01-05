@@ -44,8 +44,7 @@ impl From<&StealthAddress> for [u8; 64] {
     fn from(sa: &StealthAddress) -> [u8; 64] {
         let mut bytes = [0u8; 64];
         bytes[..32].copy_from_slice(&JubJubAffine::from(sa.R).to_bytes()[..]);
-        bytes[32..]
-            .copy_from_slice(&JubJubAffine::from(sa.pk_r).to_bytes()[..]);
+        bytes[32..].copy_from_slice(&JubJubAffine::from(sa.pk_r).to_bytes()[..]);
         bytes
     }
 }
@@ -138,19 +137,16 @@ impl fmt::Display for StealthAddress {
     }
 }
 
-#[cfg(feature = "std")]
-impl TryFrom<String> for StealthAddress {
+impl TryFrom<&str> for StealthAddress {
     type Error = Error;
 
-    fn try_from(s: String) -> Result<Self, Self::Error> {
+    fn try_from(s: &str) -> Result<Self, Self::Error> {
         if s.len() != 128 {
             return Err(Error::BadLength {
                 found: s.len(),
                 expected: 128,
             });
         }
-
-        let s = s.as_str();
 
         let R = hex::decode(&s[..64]).map_err(|_| Error::InvalidPoint)?;
         let R = JubJubExtended::from(decode::<JubJubAffine>(&R[..])?);

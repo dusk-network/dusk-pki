@@ -19,9 +19,6 @@ use rand_core::{CryptoRng, RngCore};
 
 use core::fmt;
 
-#[cfg(feature = "std")]
-use rand::SeedableRng;
-
 /// Secret pair of `a` and `b`
 #[derive(Debug, Default, Clone, Copy, PartialEq, Eq)]
 #[cfg_attr(feature = "canon", derive(Canon))]
@@ -86,30 +83,6 @@ impl From<&SecretKey> for [u8; 64] {
         bytes[..32].copy_from_slice(&pk.a.to_bytes()[..]);
         bytes[32..].copy_from_slice(&pk.b.to_bytes()[..]);
         bytes
-    }
-}
-
-#[cfg(feature = "std")]
-impl From<&[u8]> for SecretKey {
-    fn from(bytes: &[u8]) -> Self {
-        use rand::rngs::StdRng;
-        use sha2::{Digest, Sha256};
-
-        let mut hasher = Sha256::default();
-        hasher.input(bytes);
-        let bytes = hasher.result();
-
-        let mut seed = [0u8; 32];
-        seed.copy_from_slice(&bytes[..32]);
-
-        SecretKey::random(&mut StdRng::from_seed(seed))
-    }
-}
-
-#[cfg(feature = "std")]
-impl From<String> for SecretKey {
-    fn from(s: String) -> Self {
-        Self::from(s.into_bytes().as_slice())
     }
 }
 

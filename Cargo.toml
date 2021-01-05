@@ -6,30 +6,20 @@ edition = "2018"
 
 [dependencies]
 rand_core = "0.5.1"
-dusk-bls12_381 = {version = "0.3", default-features = false}
-dusk-jubjub = {version = "0.5", default-features = false}
+dusk-jubjub = "0.5"
 poseidon252 = {git = "https://github.com/dusk-network/Poseidon252", tag = "v0.14.1", default-features = false}
-hex = {version = "^0.4", default-features = false}
-subtle = {version = "^2.2.1", default-features = false}
+hex ="^0.4"
+subtle = "^2.2.1"
 canonical = {version = "0.4", optional = true}
 canonical_derive = {version = "0.4", optional = true}
-rand = {version = "0.7", optional = true}
-sha2 = {version = "0.8", optional = true}
+
+[dev-dependencies]
+rand ="0.7"
+sha2 = "0.8"
 
 [features]
-default = ["std"]
-std = [
-    "dusk-jubjub/default",
-    "dusk-bls12_381/default",
-    "poseidon252/default",
-    "subtle/default",
-    "hex/default",
-    "rand/default",
-    "sha2/default"
-]
 canon = [
     "canonical",
     "canonical_derive",
-    "dusk-bls12_381/canon",
     "dusk-jubjub/canon"
 ]

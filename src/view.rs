@@ -5,17 +5,15 @@
 // Copyright (c) DUSK NETWORK. All rights reserved.
 
 use crate::spend::stealth;
-#[cfg(feature = "std")]
+
 use crate::Error;
 use crate::{
-    permutation, JubJubAffine, JubJubExtended, JubJubScalar, PublicSpendKey,
-    SecretSpendKey,
+    permutation, JubJubAffine, JubJubExtended, JubJubScalar, PublicSpendKey, SecretSpendKey,
 };
 
 use dusk_jubjub::GENERATOR_EXTENDED;
 use subtle::{Choice, ConstantTimeEq};
 
-#[cfg(feature = "std")]
 use core::convert::TryFrom;
 use core::fmt;
 
@@ -108,11 +106,10 @@ impl From<&ViewKey> for [u8; 64] {
     }
 }
 
-#[cfg(feature = "std")]
-impl TryFrom<String> for ViewKey {
+impl TryFrom<&str> for ViewKey {
     type Error = Error;
 
-    fn try_from(s: String) -> Result<Self, Self::Error> {
+    fn try_from(s: &str) -> Result<Self, Self::Error> {
         use crate::decode::decode;
 
         if s.len() != 128 {
@@ -121,8 +118,6 @@ impl TryFrom<String> for ViewKey {
                 expected: 128,
             });
         }
-
-        let s = s.as_str();
 
         let a = hex::decode(&s[..64]).map_err(|_| Error::InvalidPoint)?;
         let a = decode::<JubJubScalar>(&a[..])?;

@@ -4,8 +4,7 @@
 //
 // Copyright (c) DUSK NETWORK. All rights reserved.
 
-#[cfg(feature = "std")]
-use std::fmt;
+use core::fmt;
 
 /// Errors for Dusk PKI
 #[derive(Copy, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
@@ -23,7 +22,6 @@ pub enum Error {
     },
 }
 
-#[cfg(feature = "std")]
 impl fmt::Display for Error {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f, "Dusk PKI Error: {:?}", &self)

@@ -4,11 +4,8 @@
 //
 // Copyright (c) DUSK NETWORK. All rights reserved.
 
-#[cfg(feature = "std")]
 use crate::Error;
-use crate::{
-    permutation, JubJubAffine, JubJubExtended, JubJubScalar, StealthAddress,
-};
+use crate::{permutation, JubJubAffine, JubJubExtended, JubJubScalar, StealthAddress};
 
 use super::secret::SecretKey;
 
@@ -20,7 +17,6 @@ use canonical_derive::Canon;
 use dusk_jubjub::GENERATOR_EXTENDED;
 use subtle::{Choice, ConstantTimeEq};
 
-#[cfg(feature = "std")]
 use core::convert::TryFrom;
 use core::fmt;
 
@@ -105,11 +101,10 @@ impl From<&PublicKey> for [u8; 64] {
     }
 }
 
-#[cfg(feature = "std")]
-impl TryFrom<String> for PublicKey {
+impl TryFrom<&str> for PublicKey {
     type Error = Error;
 
-    fn try_from(s: String) -> Result<Self, Self::Error> {
+    fn try_from(s: &str) -> Result<Self, Self::Error> {
         use crate::decode::decode;
 
         if s.len() != 128 {
@@ -118,8 +113,6 @@ impl TryFrom<String> for PublicKey {
                 expected: 128,
             });
         }
-
-        let s = s.as_str();
 
         let A = hex::decode(&s[..64]).map_err(|_| Error::InvalidPoint)?;
         let A = JubJubExtended::from(decode::<JubJubAffine>(&A[..])?);

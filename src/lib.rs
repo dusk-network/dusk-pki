@@ -13,7 +13,7 @@
 //! This repository has been created so there's a unique library that holds the
 //! types and functions required to perform keys operations.
 
-#![cfg_attr(not(feature = "std"), no_std)]
+#![no_std]
 #![deny(missing_docs)]
 #![allow(non_snake_case)]
 
