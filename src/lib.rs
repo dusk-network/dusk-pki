@@ -22,9 +22,9 @@ pub use decode::decode as jubjub_decode;
 /// PKI Errors
 pub use errors::Error;
 /// Public Spend Key
-pub use spend::public::PublicKey as PublicSpendKey;
+pub use spend::public::PublicSpendKey;
 /// Secret Spend Key
-pub use spend::secret::SecretKey as SecretSpendKey;
+pub use spend::secret::SecretSpendKey;
 /// Stealth Address
 pub use spend::stealth::{Ownable, StealthAddress};
 /// ViewKey

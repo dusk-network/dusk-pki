@@ -6,7 +6,7 @@
 
 use crate::{permutation, JubJubScalar, ViewKey};
 
-use super::public::PublicKey;
+use super::public::PublicSpendKey;
 use super::stealth::StealthAddress;
 
 #[cfg(feature = "canon")]
@@ -22,13 +22,13 @@ use core::fmt;
 /// Secret pair of `a` and `b`
 #[derive(Debug, Default, Clone, Copy, PartialEq, Eq)]
 #[cfg_attr(feature = "canon", derive(Canon))]
-pub struct SecretKey {
+pub struct SecretSpendKey {
     a: JubJubScalar,
     b: JubJubScalar,
 }
 
-impl SecretKey {
-    /// This method is used to construct a new `SecretKey` from the given secret
+impl SecretSpendKey {
+    /// This method is used to construct a new `SecretSpendKey` from the given secret
     /// pair of `a` and `b`.
     pub fn new(a: JubJubScalar, b: JubJubScalar) -> Self {
         Self { a, b }
@@ -44,13 +44,13 @@ impl SecretKey {
         &self.b
     }
 
-    /// Deterministically create a new [`SecretKey`] from a random number
+    /// Deterministically create a new [`SecretSpendKey`] from a random number
     /// generator
     pub fn random<R: RngCore + CryptoRng>(rng: &mut R) -> Self {
         let a = JubJubScalar::random(rng);
         let b = JubJubScalar::random(rng);
 
-        SecretKey::new(a, b)
+        SecretSpendKey::new(a, b)
     }
 
     /// Generate a `sk_r = H(a · R) + b`
@@ -61,12 +61,12 @@ impl SecretKey {
         aR + self.b
     }
 
-    /// Derive the secret to deterministically construct a [`PublicKey`]
-    pub fn public_key(&self) -> PublicKey {
+    /// Derive the secret to deterministically construct a [`PublicSpendKey`]
+    pub fn public_spend_key(&self) -> PublicSpendKey {
         let A = GENERATOR_EXTENDED * self.a;
         let B = GENERATOR_EXTENDED * self.b;
 
-        PublicKey::new(A, B)
+        PublicSpendKey::new(A, B)
     }
 
     /// Derive the secret to deterministically construct a [`ViewKey`]
@@ -77,8 +77,8 @@ impl SecretKey {
     }
 }
 
-impl From<&SecretKey> for [u8; 64] {
-    fn from(pk: &SecretKey) -> Self {
+impl From<&SecretSpendKey> for [u8; 64] {
+    fn from(pk: &SecretSpendKey) -> Self {
         let mut bytes = [0u8; 64];
         bytes[..32].copy_from_slice(&pk.a.to_bytes()[..]);
         bytes[32..].copy_from_slice(&pk.b.to_bytes()[..]);
@@ -86,7 +86,7 @@ impl From<&SecretKey> for [u8; 64] {
     }
 }
 
-impl fmt::LowerHex for SecretKey {
+impl fmt::LowerHex for SecretSpendKey {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         let bytes: [u8; 64] = self.into();
 
@@ -102,7 +102,7 @@ impl fmt::LowerHex for SecretKey {
     }
 }
 
-impl fmt::UpperHex for SecretKey {
+impl fmt::UpperHex for SecretSpendKey {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         let bytes: [u8; 64] = self.into();
 
@@ -118,7 +118,7 @@ impl fmt::UpperHex for SecretKey {
     }
 }
 
-impl fmt::Display for SecretKey {
+impl fmt::Display for SecretSpendKey {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f, "{:x}", self)
     }

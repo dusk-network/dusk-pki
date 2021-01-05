@@ -7,7 +7,7 @@
 use crate::Error;
 use crate::{permutation, JubJubAffine, JubJubExtended, JubJubScalar, StealthAddress};
 
-use super::secret::SecretKey;
+use super::secret::SecretSpendKey;
 
 #[cfg(feature = "canon")]
 use canonical::Canon;
@@ -23,13 +23,13 @@ use core::fmt;
 /// Public pair of `a·G` and `b·G`
 #[derive(Debug, Clone, Copy)]
 #[cfg_attr(feature = "canon", derive(Canon))]
-pub struct PublicKey {
+pub struct PublicSpendKey {
     A: JubJubExtended,
     B: JubJubExtended,
 }
 
-impl PublicKey {
-    /// This method is used to construct a new `PublicKey` from the given public
+impl PublicSpendKey {
+    /// This method is used to construct a new `PublicSpendKey` from the given public
     /// pair of `a·G` and `b·G`
     pub fn new(A: JubJubExtended, B: JubJubExtended) -> Self {
         Self { A, B }
@@ -60,40 +60,40 @@ impl PublicKey {
     }
 }
 
-impl ConstantTimeEq for PublicKey {
+impl ConstantTimeEq for PublicSpendKey {
     fn ct_eq(&self, other: &Self) -> Choice {
         self.A.ct_eq(&other.A) & self.B.ct_eq(&other.B)
     }
 }
 
-impl PartialEq for PublicKey {
+impl PartialEq for PublicSpendKey {
     fn eq(&self, other: &Self) -> bool {
         self.ct_eq(&other).into()
     }
 }
 
-impl Eq for PublicKey {}
+impl Eq for PublicSpendKey {}
 
-impl Default for PublicKey {
+impl Default for PublicSpendKey {
     fn default() -> Self {
-        SecretKey::default().public_key()
+        SecretSpendKey::default().public_spend_key()
     }
 }
 
-impl From<SecretKey> for PublicKey {
-    fn from(secret: SecretKey) -> Self {
-        secret.public_key()
+impl From<SecretSpendKey> for PublicSpendKey {
+    fn from(secret: SecretSpendKey) -> Self {
+        secret.public_spend_key()
     }
 }
 
-impl From<&SecretKey> for PublicKey {
-    fn from(secret: &SecretKey) -> Self {
-        secret.public_key()
+impl From<&SecretSpendKey> for PublicSpendKey {
+    fn from(secret: &SecretSpendKey) -> Self {
+        secret.public_spend_key()
     }
 }
 
-impl From<&PublicKey> for [u8; 64] {
-    fn from(pk: &PublicKey) -> [u8; 64] {
+impl From<&PublicSpendKey> for [u8; 64] {
+    fn from(pk: &PublicSpendKey) -> [u8; 64] {
         let mut bytes = [0u8; 64];
         bytes[..32].copy_from_slice(&JubJubAffine::from(pk.A).to_bytes()[..]);
         bytes[32..].copy_from_slice(&JubJubAffine::from(pk.B).to_bytes()[..]);
@@ -101,7 +101,7 @@ impl From<&PublicKey> for [u8; 64] {
     }
 }
 
-impl TryFrom<&str> for PublicKey {
+impl TryFrom<&str> for PublicSpendKey {
     type Error = Error;
 
     fn try_from(s: &str) -> Result<Self, Self::Error> {
@@ -120,11 +120,11 @@ impl TryFrom<&str> for PublicKey {
         let B = hex::decode(&s[64..]).map_err(|_| Error::InvalidPoint)?;
         let B = JubJubExtended::from(decode::<JubJubAffine>(&B[..])?);
 
-        Ok(PublicKey::new(A, B))
+        Ok(PublicSpendKey::new(A, B))
     }
 }
 
-impl fmt::LowerHex for PublicKey {
+impl fmt::LowerHex for PublicSpendKey {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         let bytes: [u8; 64] = self.into();
 
@@ -140,7 +140,7 @@ impl fmt::LowerHex for PublicKey {
     }
 }
 
-impl fmt::UpperHex for PublicKey {
+impl fmt::UpperHex for PublicSpendKey {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         let bytes: [u8; 64] = self.into();
 
@@ -156,7 +156,7 @@ impl fmt::UpperHex for PublicKey {
     }
 }
 
-impl fmt::Display for PublicKey {
+impl fmt::Display for PublicSpendKey {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f, "{:x}", self)
     }

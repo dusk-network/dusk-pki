@@ -37,7 +37,7 @@ mod std_tests {
     fn keys_encoding() {
         let ssk = ssk_from_str("some bytes");
         let vk = ssk.view_key();
-        let psk = ssk.public_key();
+        let psk = ssk.public_spend_key();
 
         assert_eq!(vk, ViewKey::try_from(format!("{}", vk).as_str()).unwrap());
         assert_eq!(
@@ -52,7 +52,7 @@ mod std_tests {
 
         let r = JubJubScalar::random(&mut rand::thread_rng());
         let ssk = SecretSpendKey::random(&mut rand::thread_rng());
-        let psk = ssk.public_key();
+        let psk = ssk.public_spend_key();
         let vk = ssk.view_key();
         let sa = psk.gen_stealth_address(&r);
 

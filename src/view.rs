@@ -56,7 +56,7 @@ impl ViewKey {
     }
 
     /// Derive the secret to deterministically construct a [`PublicSpendKey`]
-    pub fn public_key(&self) -> PublicSpendKey {
+    pub fn public_spend_key(&self) -> PublicSpendKey {
         let A = GENERATOR_EXTENDED * self.a;
 
         PublicSpendKey::new(A, self.B)
