@@ -5,16 +5,16 @@ authors = ["zer0 <matteo@dusk.network>", "Victor Lopez <victor@dusk.network"]
 edition = "2018"
 
 [dependencies]
-rand_core = "0.5.1"
-dusk-bls12_381 = {version = "0.3", default-features = false}
-dusk-jubjub = {version = "0.5", default-features = false}
-poseidon252 = {git = "https://github.com/dusk-network/Poseidon252", tag = "v0.14.1", default-features = false}
+rand_core = "0.6"
+dusk-bls12_381 = {git="https://github.com/dusk-network/bls12_381", branch="vlopes11/g1affine-raw-bytes", default-features=false}
+dusk-jubjub = {git="https://github.com/dusk-network/jubjub", branch="vlopes11/g1affine-unchecked-bytes", default-features=false}
+poseidon252 = {git="https://github.com/dusk-network/Poseidon252", branch="vlopes11/bump-plonk", default-features=false}
 hex = {version = "^0.4", default-features = false}
 subtle = {version = "^2.2.1", default-features = false}
 canonical = {version = "0.4", optional = true}
 canonical_derive = {version = "0.4", optional = true}
-rand = {version = "0.7", optional = true}
-sha2 = {version = "0.8", optional = true}
+rand = {version="0.8", optional = true}
+sha2 = {version="0.8", optional = true}
 
 [features]
 default = ["std"]
