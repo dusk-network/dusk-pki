@@ -17,11 +17,6 @@
 #![deny(missing_docs)]
 #![allow(non_snake_case)]
 
-pub use decode::decode as jubjub_decode;
-
-/// PKI Errors
-pub use errors::Error;
-
 /// Public Key
 pub use keys::public::PublicKey;
 /// Secret Key
@@ -35,8 +30,6 @@ pub use keys::spend::stealth::{Ownable, StealthAddress};
 /// ViewKey
 pub use view::ViewKey;
 
-mod decode;
-mod errors;
 mod keys;
 mod permutation;
 mod view;

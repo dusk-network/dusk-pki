@@ -4,27 +4,24 @@
 //
 // Copyright (c) DUSK NETWORK. All rights reserved.
 
-use crate::{decode::decode, Error, JubJubAffine, JubJubExtended};
-
+use crate::{JubJubAffine, JubJubExtended, PublicKey};
 #[cfg(feature = "canon")]
 use canonical::Canon;
 #[cfg(feature = "canon")]
 use canonical_derive::Canon;
+use dusk_bytes::{DeserializableSlice, Error, HexDebug, Serializable};
 
 use subtle::{Choice, ConstantTimeEq};
 
-use core::convert::{TryFrom, TryInto};
-use core::fmt;
-
-//. To obfuscate the identity of the participants, we utilizes a Stealth Address
-//. system.
+/// To obfuscate the identity of the participants, we utilizes a Stealth Address
+/// system.
 /// A `StealthAddress` is composed by a one-time public key (`pk_r`, the actual
 // address) and a random point `R`.
-#[derive(Debug, Clone, Copy)]
+#[derive(HexDebug, Clone, Copy)]
 #[cfg_attr(feature = "canon", derive(Canon))]
 pub struct StealthAddress {
     pub(crate) R: JubJubExtended,
-    pub(crate) pk_r: JubJubExtended,
+    pub(crate) pk_r: PublicKey,
 }
 
 /// The trait `Ownable` is required by any type that wants to prove its
@@ -34,32 +31,6 @@ pub trait Ownable {
     fn stealth_address(&self) -> &StealthAddress;
 }
 
-impl Ownable for StealthAddress {
-    fn stealth_address(&self) -> &StealthAddress {
-        &self
-    }
-}
-
-impl From<&StealthAddress> for [u8; 64] {
-    fn from(sa: &StealthAddress) -> [u8; 64] {
-        let mut bytes = [0u8; 64];
-        bytes[..32].copy_from_slice(&JubJubAffine::from(sa.R).to_bytes()[..]);
-        bytes[32..].copy_from_slice(&JubJubAffine::from(sa.pk_r).to_bytes()[..]);
-        bytes
-    }
-}
-
-impl TryFrom<&[u8; 64]> for StealthAddress {
-    type Error = Error;
-
-    fn try_from(bytes: &[u8; 64]) -> Result<Self, Self::Error> {
-        let R = JubJubExtended::from(decode::<JubJubAffine>(&bytes[..32])?);
-        let pk_r = JubJubExtended::from(decode::<JubJubAffine>(&bytes[32..])?);
-
-        Ok(StealthAddress { R, pk_r })
-    }
-}
-
 impl StealthAddress {
     /// Gets the random point `R`
     pub fn R(&self) -> &JubJubExtended {
@@ -67,29 +38,19 @@ impl StealthAddress {
     }
 
     /// Gets the `pk_r`
-    pub fn pk_r(&self) -> &JubJubExtended {
+    pub fn pk_r(&self) -> &PublicKey {
         &self.pk_r
     }
 
-    /// Alias to `pk_r()` method
+    /// Gets the underline `JubJubExtended` point of `pk_r`
     pub fn address(&self) -> &JubJubExtended {
-        &self.pk_r
-    }
-
-    /// Encode the `StealthAddress` to an array of 64 bytes
-    pub fn to_bytes(&self) -> [u8; 64] {
-        self.into()
-    }
-
-    /// Decode the `StealthAddress` from an array of 64 bytes
-    pub fn from_bytes(bytes: &[u8; 64]) -> Result<Self, Error> {
-        bytes.try_into()
+        &self.pk_r.as_ref()
     }
 }
 
 impl ConstantTimeEq for StealthAddress {
     fn ct_eq(&self, other: &Self) -> Choice {
-        self.pk_r.ct_eq(&other.pk_r) & self.R.ct_eq(&other.R)
+        self.pk_r.as_ref().ct_eq(&other.pk_r.as_ref()) & self.R.ct_eq(&other.R)
     }
 }
 
@@ -99,60 +60,30 @@ impl PartialEq for StealthAddress {
     }
 }
 
-impl fmt::LowerHex for StealthAddress {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        let bytes: [u8; 64] = self.into();
-
-        if f.alternate() {
-            write!(f, "0x")?
-        }
-
-        for byte in &bytes[..] {
-            write!(f, "{:02X}", &byte)?
-        }
-
-        Ok(())
+impl Ownable for StealthAddress {
+    fn stealth_address(&self) -> &StealthAddress {
+        &self
     }
 }
 
-impl fmt::UpperHex for StealthAddress {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        let bytes: [u8; 64] = self.into();
-
-        if f.alternate() {
-            write!(f, "0x")?
-        }
-
-        for byte in &bytes[..] {
-            write!(f, "{:02X}", &byte)?
-        }
-
-        Ok(())
-    }
-}
-
-impl fmt::Display for StealthAddress {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "{:x}", self)
-    }
-}
-
-impl TryFrom<&str> for StealthAddress {
+impl Serializable<64> for StealthAddress {
     type Error = Error;
+    /// Encode the `StealthAddress` to an array of 64 bytes
+    fn to_bytes(&self) -> [u8; Self::SIZE] {
+        let mut bytes = [0u8; Self::SIZE];
+        bytes[..32].copy_from_slice(&JubJubAffine::from(self.R).to_bytes());
+        bytes[32..].copy_from_slice(
+            &JubJubAffine::from(self.pk_r.as_ref()).to_bytes(),
+        );
+        bytes
+    }
 
-    fn try_from(s: &str) -> Result<Self, Self::Error> {
-        if s.len() != 128 {
-            return Err(Error::BadLength {
-                found: s.len(),
-                expected: 128,
-            });
-        }
-
-        let R = hex::decode(&s[..64]).map_err(|_| Error::InvalidPoint)?;
-        let R = JubJubExtended::from(decode::<JubJubAffine>(&R[..])?);
-
-        let pk_r = hex::decode(&s[64..]).map_err(|_| Error::InvalidPoint)?;
-        let pk_r = JubJubExtended::from(decode::<JubJubAffine>(&pk_r[..])?);
+    /// Decode the `StealthAddress` from an array of 64 bytes
+    fn from_bytes(bytes: &[u8; Self::SIZE]) -> Result<Self, Error> {
+        let R = JubJubExtended::from(JubJubAffine::from_slice(&bytes[..32])?);
+        let pk_r =
+            JubJubExtended::from(JubJubAffine::from_slice(&bytes[32..])?);
+        let pk_r = PublicKey(pk_r);
 
         Ok(StealthAddress { R, pk_r })
     }

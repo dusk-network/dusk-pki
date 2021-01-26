@@ -4,16 +4,20 @@
 //
 // Copyright (c) DUSK NETWORK. All rights reserved.
 
-use crate::{Error, JubJubScalar};
-use core::convert::TryFrom;
-use core::fmt;
+use crate::JubJubScalar;
+use dusk_bytes::{Error, HexDebug, Serializable};
 use rand_core::{CryptoRng, RngCore};
 
+#[cfg(feature = "canon")]
+use canonical::Canon;
+#[cfg(feature = "canon")]
+use canonical_derive::Canon;
+
 #[allow(non_snake_case)]
-#[derive(Default, Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord)]
 #[cfg_attr(feature = "canon", derive(Canon))]
+#[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, HexDebug)]
 /// Structure repesenting a secret key
-pub struct SecretKey(JubJubScalar);
+pub struct SecretKey(pub(crate) JubJubScalar);
 
 impl From<JubJubScalar> for SecretKey {
     fn from(s: JubJubScalar) -> SecretKey {
@@ -36,7 +40,7 @@ impl AsRef<JubJubScalar> for SecretKey {
 impl SecretKey {
     /// This will create a random [`SecretKey`] from a scalar
     /// of the Field JubJubScalar.
-    pub fn new<T>(rand: &mut T) -> SecretKey
+    pub fn random<T>(rand: &mut T) -> SecretKey
     where
         T: RngCore + CryptoRng,
     {
@@ -44,57 +48,16 @@ impl SecretKey {
 
         SecretKey(fr)
     }
-
-    /// Copies `self` into a new array of 32 bytes.
-    pub fn to_bytes(&self) -> [u8; 32] {
-        let mut bytes = [0u8; 32];
-        bytes.copy_from_slice(&self.0.to_bytes());
-        bytes
-    }
-
-    /// Create a new [`SecretKey`] from an array of 32 bytes.
-    pub fn from_bytes(bytes: &[u8; 32]) -> Result<Self, Error> {
-        match Option::from(JubJubScalar::from_bytes(bytes)) {
-            Some(scalar) => Ok(SecretKey(scalar)),
-            _ => Err(Error::InvalidScalar),
-        }
-    }
 }
 
-impl fmt::LowerHex for SecretKey {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        let bytes = self.to_bytes();
+impl Serializable<32> for SecretKey {
+    type Error = Error;
 
-        if f.alternate() {
-            write!(f, "0x")?
-        }
-
-        for byte in &bytes[..] {
-            write!(f, "{:02X}", &byte)?
-        }
-
-        Ok(())
+    fn to_bytes(&self) -> [u8; 32] {
+        self.0.to_bytes()
     }
-}
 
-impl fmt::UpperHex for SecretKey {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        let bytes = self.to_bytes();
-
-        if f.alternate() {
-            write!(f, "0x")?
-        }
-
-        for byte in &bytes[..] {
-            write!(f, "{:02X}", &byte)?
-        }
-
-        Ok(())
-    }
-}
-
-impl fmt::Display for SecretKey {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "{:x}", self)
+    fn from_bytes(bytes: &[u8; 32]) -> Result<Self, Error> {
+        Ok(Self(JubJubScalar::from_bytes(bytes)?))
     }
 }

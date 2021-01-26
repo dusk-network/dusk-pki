@@ -4,7 +4,7 @@
 //
 // Copyright (c) DUSK NETWORK. All rights reserved.
 
-use crate::{permutation, JubJubScalar, ViewKey};
+use crate::{permutation, JubJubScalar, SecretKey, ViewKey};
 
 use super::public::PublicSpendKey;
 use super::stealth::StealthAddress;
@@ -14,13 +14,13 @@ use canonical::Canon;
 #[cfg(feature = "canon")]
 use canonical_derive::Canon;
 
+use dusk_bytes::{DeserializableSlice, Error, HexDebug, Serializable};
 use dusk_jubjub::GENERATOR_EXTENDED;
 use rand_core::{CryptoRng, RngCore};
-
-use core::fmt;
+use subtle::{Choice, ConstantTimeEq};
 
 /// Secret pair of `a` and `b` defining a [`SecretSpendKey`]
-#[derive(Debug, Default, Clone, Copy, PartialEq, Eq)]
+#[derive(Clone, Copy, Eq, HexDebug)]
 #[cfg_attr(feature = "canon", derive(Canon))]
 pub struct SecretSpendKey {
     a: JubJubScalar,
@@ -28,8 +28,8 @@ pub struct SecretSpendKey {
 }
 
 impl SecretSpendKey {
-    /// This method is used to construct a new `SecretSpendKey` from the given secret
-    /// pair of `a` and `b`.
+    /// This method is used to construct a new `SecretSpendKey` from the given
+    /// secret pair of `a` and `b`.
     pub fn new(a: JubJubScalar, b: JubJubScalar) -> Self {
         Self { a, b }
     }
@@ -53,12 +53,13 @@ impl SecretSpendKey {
         SecretSpendKey::new(a, b)
     }
 
-    /// Generate a `sk_r = H(a · R) + b`
-    pub fn sk_r(&self, sa: &StealthAddress) -> JubJubScalar {
+    /// Generates a [`SecretKey`] using the [`StealthAddress`] given.
+    /// With the formula: `sk_r = H(a · R) + b`
+    pub fn sk_r(&self, sa: &StealthAddress) -> SecretKey {
         let aR = sa.R() * self.a;
         let aR = permutation::hash(&aR);
 
-        aR + self.b
+        SecretKey(aR + self.b)
     }
 
     /// Derive the secret to deterministically construct a [`PublicSpendKey`]
@@ -77,49 +78,32 @@ impl SecretSpendKey {
     }
 }
 
-impl From<&SecretSpendKey> for [u8; 64] {
-    fn from(pk: &SecretSpendKey) -> Self {
+impl ConstantTimeEq for SecretSpendKey {
+    fn ct_eq(&self, other: &Self) -> Choice {
+        self.a.ct_eq(&other.a) & self.b.ct_eq(&other.b)
+    }
+}
+
+impl PartialEq for SecretSpendKey {
+    fn eq(&self, other: &Self) -> bool {
+        self.ct_eq(&other).into()
+    }
+}
+
+impl Serializable<64> for SecretSpendKey {
+    type Error = Error;
+
+    fn to_bytes(&self) -> [u8; 64] {
         let mut bytes = [0u8; 64];
-        bytes[..32].copy_from_slice(&pk.a.to_bytes()[..]);
-        bytes[32..].copy_from_slice(&pk.b.to_bytes()[..]);
+        bytes[..32].copy_from_slice(&self.a.to_bytes());
+        bytes[32..].copy_from_slice(&self.b.to_bytes());
         bytes
     }
-}
 
-impl fmt::LowerHex for SecretSpendKey {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        let bytes: [u8; 64] = self.into();
+    fn from_bytes(buf: &[u8; 64]) -> Result<Self, Self::Error> {
+        let a = JubJubScalar::from_slice(&buf[..32])?;
+        let b = JubJubScalar::from_slice(&buf[32..])?;
 
-        if f.alternate() {
-            write!(f, "0x")?
-        }
-
-        for byte in &bytes[..] {
-            write!(f, "{:02X}", &byte)?
-        }
-
-        Ok(())
-    }
-}
-
-impl fmt::UpperHex for SecretSpendKey {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        let bytes: [u8; 64] = self.into();
-
-        if f.alternate() {
-            write!(f, "0x")?
-        }
-
-        for byte in &bytes[..] {
-            write!(f, "{:02X}", &byte)?
-        }
-
-        Ok(())
-    }
-}
-
-impl fmt::Display for SecretSpendKey {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "{:x}", self)
+        Ok(Self { a, b })
     }
 }

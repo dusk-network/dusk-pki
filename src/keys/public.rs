@@ -5,16 +5,19 @@
 // Copyright (c) DUSK NETWORK. All rights reserved.
 
 use super::secret::SecretKey;
-use crate::{Error, JubJubAffine, JubJubExtended};
-use core::convert::TryFrom;
-use core::fmt;
+use crate::{JubJubAffine, JubJubExtended};
+use dusk_bytes::{Error, HexDebug, Serializable};
 use dusk_jubjub::GENERATOR_EXTENDED;
 
-#[derive(Debug, Default, Copy, Clone, PartialEq)]
-#[cfg_attr(feature = "canon", derive(Canon))]
+#[cfg(feature = "canon")]
+use canonical::Canon;
+#[cfg(feature = "canon")]
+use canonical_derive::Canon;
 
 /// Structure repesenting a [`PublicKey`]
-pub struct PublicKey(JubJubExtended);
+#[derive(Copy, Clone, PartialEq, HexDebug)]
+#[cfg_attr(feature = "canon", derive(Canon))]
+pub struct PublicKey(pub(crate) JubJubExtended);
 
 impl From<&SecretKey> for PublicKey {
     fn from(sk: &SecretKey) -> Self {
@@ -42,55 +45,14 @@ impl AsRef<JubJubExtended> for PublicKey {
     }
 }
 
-impl PublicKey {
-    /// Copies `self` into a new array of 32 bytes.
-    pub fn to_bytes(&self) -> [u8; 32] {
+impl Serializable<32> for PublicKey {
+    type Error = Error;
+
+    fn to_bytes(&self) -> [u8; 32] {
         JubJubAffine::from(self.0).to_bytes()
     }
 
-    /// Create a new `PublicKey` from an array of 32 bytes.
-    pub fn from_bytes(bytes: &[u8; 32]) -> Result<Self, Error> {
-        match Option::<JubJubAffine>::from(JubJubAffine::from_bytes(*bytes)) {
-            Some(point) => Ok(PublicKey(JubJubExtended::from(point))),
-            _ => Err(Error::InvalidPoint),
-        }
-    }
-}
-
-impl fmt::LowerHex for PublicKey {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        let bytes = self.to_bytes();
-
-        if f.alternate() {
-            write!(f, "0x")?
-        }
-
-        for byte in &bytes[..] {
-            write!(f, "{:02X}", &byte)?
-        }
-
-        Ok(())
-    }
-}
-
-impl fmt::UpperHex for PublicKey {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        let bytes = self.to_bytes();
-
-        if f.alternate() {
-            write!(f, "0x")?
-        }
-
-        for byte in &bytes[..] {
-            write!(f, "{:02X}", &byte)?
-        }
-
-        Ok(())
-    }
-}
-
-impl fmt::Display for PublicKey {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "{:x}", self)
+    fn from_bytes(bytes: &[u8; 32]) -> Result<Self, Error> {
+        Ok(Self(JubJubAffine::from_bytes(bytes)?.into()))
     }
 }

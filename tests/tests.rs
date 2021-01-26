@@ -5,10 +5,9 @@
 // Copyright (c) DUSK NETWORK. All rights reserved.
 
 mod std_tests {
-    use core::convert::TryFrom;
+    use dusk_bytes::ParseHexStr;
     use dusk_pki::{PublicSpendKey, SecretSpendKey, ViewKey};
     use rand::SeedableRng;
-
     fn ssk_from_str(s: &str) -> SecretSpendKey {
         use rand::rngs::StdRng;
         use sha2::{Digest, Sha256};
@@ -39,10 +38,14 @@ mod std_tests {
         let vk = ssk.view_key();
         let psk = ssk.public_spend_key();
 
-        assert_eq!(vk, ViewKey::try_from(format!("{}", vk).as_str()).unwrap());
+        assert_eq!(
+            vk,
+            ViewKey::from_hex_str(format!("{:x}", vk).as_str()).unwrap()
+        );
         assert_eq!(
             psk,
-            PublicSpendKey::try_from(format!("{}", psk).as_str()).unwrap()
+            PublicSpendKey::from_hex_str(format!("{:x}", psk).as_str())
+                .unwrap()
         );
     }
 
@@ -69,7 +72,7 @@ mod std_tests {
         let sk_r = ssk.sk_r(&sa);
         let wrong_sk_r = wrong_ssk.sk_r(&sa);
 
-        assert_eq!(sa.pk_r(), &(GENERATOR_EXTENDED * &sk_r));
-        assert_ne!(sa.pk_r(), &(GENERATOR_EXTENDED * &wrong_sk_r));
+        assert_eq!(sa.address(), &(GENERATOR_EXTENDED * sk_r.as_ref()));
+        assert_ne!(sa.address(), &(GENERATOR_EXTENDED * wrong_sk_r.as_ref()));
     }
 }

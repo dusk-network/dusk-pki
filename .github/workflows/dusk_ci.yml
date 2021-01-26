@@ -51,7 +51,7 @@ jobs:
           args: --release
 
   test_nightly_canon:
-    name: Nightly tests
+    name: Nightly tests canon
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2

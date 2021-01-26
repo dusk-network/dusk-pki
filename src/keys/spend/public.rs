@@ -4,8 +4,10 @@
 //
 // Copyright (c) DUSK NETWORK. All rights reserved.
 
-use crate::Error;
-use crate::{permutation, JubJubAffine, JubJubExtended, JubJubScalar, StealthAddress};
+use crate::{
+    permutation, JubJubAffine, JubJubExtended, JubJubScalar, PublicKey,
+    StealthAddress,
+};
 
 use super::secret::SecretSpendKey;
 
@@ -14,14 +16,12 @@ use canonical::Canon;
 #[cfg(feature = "canon")]
 use canonical_derive::Canon;
 
+use dusk_bytes::{DeserializableSlice, Error, HexDebug, Serializable};
 use dusk_jubjub::GENERATOR_EXTENDED;
 use subtle::{Choice, ConstantTimeEq};
 
-use core::convert::TryFrom;
-use core::fmt;
-
 /// Public pair of `a·G` and `b·G` defining a [`PublicSpendKey`]
-#[derive(Debug, Clone, Copy)]
+#[derive(HexDebug, Clone, Copy)]
 #[cfg_attr(feature = "canon", derive(Canon))]
 pub struct PublicSpendKey {
     A: JubJubExtended,
@@ -29,8 +29,8 @@ pub struct PublicSpendKey {
 }
 
 impl PublicSpendKey {
-    /// This method is used to construct a new `PublicSpendKey` from the given public
-    /// pair of `a·G` and `b·G`
+    /// This method is used to construct a new `PublicSpendKey` from the given
+    /// public pair of `a·G` and `b·G`
     pub fn new(A: JubJubExtended, B: JubJubExtended) -> Self {
         Self { A, B }
     }
@@ -55,6 +55,7 @@ impl PublicSpendKey {
         let rA = G * rA;
 
         let pk_r = rA + self.B;
+        let pk_r = PublicKey(pk_r);
 
         StealthAddress { R, pk_r }
     }
@@ -74,12 +75,6 @@ impl PartialEq for PublicSpendKey {
 
 impl Eq for PublicSpendKey {}
 
-impl Default for PublicSpendKey {
-    fn default() -> Self {
-        SecretSpendKey::default().public_spend_key()
-    }
-}
-
 impl From<SecretSpendKey> for PublicSpendKey {
     fn from(secret: SecretSpendKey) -> Self {
         secret.public_spend_key()
@@ -92,72 +87,20 @@ impl From<&SecretSpendKey> for PublicSpendKey {
     }
 }
 
-impl From<&PublicSpendKey> for [u8; 64] {
-    fn from(pk: &PublicSpendKey) -> [u8; 64] {
-        let mut bytes = [0u8; 64];
-        bytes[..32].copy_from_slice(&JubJubAffine::from(pk.A).to_bytes()[..]);
-        bytes[32..].copy_from_slice(&JubJubAffine::from(pk.B).to_bytes()[..]);
-        bytes
-    }
-}
-
-impl TryFrom<&str> for PublicSpendKey {
+impl Serializable<64> for PublicSpendKey {
     type Error = Error;
 
-    fn try_from(s: &str) -> Result<Self, Self::Error> {
-        use crate::decode::decode;
-
-        if s.len() != 128 {
-            return Err(Error::BadLength {
-                found: s.len(),
-                expected: 128,
-            });
-        }
-
-        let A = hex::decode(&s[..64]).map_err(|_| Error::InvalidPoint)?;
-        let A = JubJubExtended::from(decode::<JubJubAffine>(&A[..])?);
-
-        let B = hex::decode(&s[64..]).map_err(|_| Error::InvalidPoint)?;
-        let B = JubJubExtended::from(decode::<JubJubAffine>(&B[..])?);
-
-        Ok(PublicSpendKey::new(A, B))
+    fn to_bytes(&self) -> [u8; Self::SIZE] {
+        let mut bytes = [0u8; Self::SIZE];
+        bytes[..32].copy_from_slice(&JubJubAffine::from(self.A).to_bytes());
+        bytes[32..].copy_from_slice(&JubJubAffine::from(self.B).to_bytes());
+        bytes
     }
-}
 
-impl fmt::LowerHex for PublicSpendKey {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        let bytes: [u8; 64] = self.into();
+    fn from_bytes(bytes: &[u8; Self::SIZE]) -> Result<Self, Self::Error> {
+        let A = JubJubExtended::from(JubJubAffine::from_slice(&bytes[..32])?);
+        let B = JubJubExtended::from(JubJubAffine::from_slice(&bytes[32..])?);
 
-        if f.alternate() {
-            write!(f, "0x")?
-        }
-
-        for byte in &bytes[..] {
-            write!(f, "{:02X}", &byte)?
-        }
-
-        Ok(())
-    }
-}
-
-impl fmt::UpperHex for PublicSpendKey {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        let bytes: [u8; 64] = self.into();
-
-        if f.alternate() {
-            write!(f, "0x")?
-        }
-
-        for byte in &bytes[..] {
-            write!(f, "{:02X}", &byte)?
-        }
-
-        Ok(())
-    }
-}
-
-impl fmt::Display for PublicSpendKey {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "{:x}", self)
+        Ok(Self { A, B })
     }
 }
