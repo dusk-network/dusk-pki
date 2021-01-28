@@ -4,26 +4,22 @@
 //
 // Copyright (c) DUSK NETWORK. All rights reserved.
 
-use crate::spend::stealth;
-#[cfg(feature = "std")]
-use crate::Error;
+use crate::keys::spend::stealth;
+
 use crate::{
     permutation, JubJubAffine, JubJubExtended, JubJubScalar, PublicSpendKey,
     SecretSpendKey,
 };
 
+use dusk_bytes::{DeserializableSlice, Error, HexDebug, Serializable};
 use dusk_jubjub::GENERATOR_EXTENDED;
 use subtle::{Choice, ConstantTimeEq};
-
-#[cfg(feature = "std")]
-use core::convert::TryFrom;
-use core::fmt;
 
 /// Pair of a secret `a` and public `b·G`
 ///
 /// The notes are encrypted against secret a, so this is used to decrypt the
 /// blinding factor and value
-#[derive(Debug, Clone, Copy)]
+#[derive(Clone, Copy, HexDebug)]
 pub struct ViewKey {
     a: JubJubScalar,
     B: JubJubExtended,
@@ -44,12 +40,6 @@ impl PartialEq for ViewKey {
 
 impl Eq for ViewKey {}
 
-impl Default for ViewKey {
-    fn default() -> Self {
-        SecretSpendKey::default().view_key()
-    }
-}
-
 impl ViewKey {
     /// This method is used to construct a new `ViewKey` from the given
     /// pair of secret `a` and public `b·G`.
@@ -58,7 +48,7 @@ impl ViewKey {
     }
 
     /// Derive the secret to deterministically construct a [`PublicSpendKey`]
-    pub fn public_key(&self) -> PublicSpendKey {
+    pub fn public_spend_key(&self) -> PublicSpendKey {
         let A = GENERATOR_EXTENDED * self.a;
 
         PublicSpendKey::new(A, self.B)
@@ -83,7 +73,7 @@ impl ViewKey {
         let aR = GENERATOR_EXTENDED * aR;
         let pk_r = aR + self.B();
 
-        sa.pk_r() == &pk_r
+        sa.address() == &pk_r
     }
 }
 
@@ -99,75 +89,20 @@ impl From<&SecretSpendKey> for ViewKey {
     }
 }
 
-impl From<&ViewKey> for [u8; 64] {
-    fn from(vk: &ViewKey) -> Self {
-        let mut bytes = [0u8; 64];
-        bytes[..32].copy_from_slice(&vk.a.to_bytes()[..]);
-        bytes[32..].copy_from_slice(&JubJubAffine::from(&vk.B).to_bytes()[..]);
-        bytes
-    }
-}
-
-#[cfg(feature = "std")]
-impl TryFrom<String> for ViewKey {
+impl Serializable<64> for ViewKey {
     type Error = Error;
 
-    fn try_from(s: String) -> Result<Self, Self::Error> {
-        use crate::decode::decode;
-
-        if s.len() != 128 {
-            return Err(Error::BadLength {
-                found: s.len(),
-                expected: 128,
-            });
-        }
-
-        let s = s.as_str();
-
-        let a = hex::decode(&s[..64]).map_err(|_| Error::InvalidPoint)?;
-        let a = decode::<JubJubScalar>(&a[..])?;
-
-        let B = hex::decode(&s[64..]).map_err(|_| Error::InvalidPoint)?;
-        let B = JubJubExtended::from(decode::<JubJubAffine>(&B[..])?);
-
-        Ok(ViewKey::new(a, B))
+    fn to_bytes(&self) -> [u8; 64] {
+        let mut bytes = [0u8; 64];
+        bytes[..32].copy_from_slice(&self.a.to_bytes());
+        bytes[32..].copy_from_slice(&JubJubAffine::from(&self.B).to_bytes());
+        bytes
     }
-}
 
-impl fmt::LowerHex for ViewKey {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        let bytes: [u8; 64] = self.into();
+    fn from_bytes(buf: &[u8; 64]) -> Result<Self, Self::Error> {
+        let a = JubJubScalar::from_slice(&buf[..32])?;
+        let B = JubJubExtended::from(JubJubAffine::from_slice(&buf[32..])?);
 
-        if f.alternate() {
-            write!(f, "0x")?
-        }
-
-        for byte in &bytes[..] {
-            write!(f, "{:02X}", &byte)?
-        }
-
-        Ok(())
-    }
-}
-
-impl fmt::UpperHex for ViewKey {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        let bytes: [u8; 64] = self.into();
-
-        if f.alternate() {
-            write!(f, "0x")?
-        }
-
-        for byte in &bytes[..] {
-            write!(f, "{:02X}", &byte)?
-        }
-
-        Ok(())
-    }
-}
-
-impl fmt::Display for ViewKey {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "{:x}", self)
+        Ok(Self { a, B })
     }
 }
