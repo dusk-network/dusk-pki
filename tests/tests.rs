@@ -9,6 +9,8 @@ mod std_tests {
     use dusk_pki::{PublicSpendKey, SecretSpendKey, ViewKey};
     use rand::SeedableRng;
     fn ssk_from_str(s: &str) -> SecretSpendKey {
+        let a = "foo";
+
         use rand::rngs::StdRng;
         use sha2::{Digest, Sha256};
 
@@ -44,8 +46,7 @@ mod std_tests {
         );
         assert_eq!(
             psk,
-            PublicSpendKey::from_hex_str(format!("{:x}", psk).as_str())
-                .unwrap()
+            PublicSpendKey::from_hex_str(format!("{:x}", psk).as_str()).unwrap()
         );
     }
 
