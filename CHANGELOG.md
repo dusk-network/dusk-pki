@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.5.2] - 2021-02-09
+
+### Changed
+
+- Fix `jubjub` default-features flag [#34](https://github.com/dusk-network/dusk-pki/issues/34)
+
 ## [0.5.1] - 2021-02-01
 
 ### Changed
