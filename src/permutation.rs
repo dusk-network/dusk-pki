@@ -6,7 +6,7 @@
 
 use crate::{JubJubExtended, JubJubScalar};
 
-use poseidon252::sponge;
+use dusk_poseidon::sponge;
 
 /// Hashes a JubJub's ExtendedPoint into a JubJub's Scalar
 pub fn hash(p: &JubJubExtended) -> JubJubScalar {
