@@ -1,8 +1,15 @@
 [package]
 name = "dusk-pki"
-version = "0.6.0"
+version = "0.6.1"
 authors = ["zer0 <matteo@dusk.network>", "Victor Lopez <victor@dusk.network>"]
 edition = "2018"
+
+repository = "https://github.com/dusk-network/dusk-pki"
+keywords = ["cryptography", "crypto", "pki", "bls12-381"]
+categories =["cryptography", "cryptography::cryptocurrencies", "no-std", "wasm"]
+description = "A library that holds the types and functions required to perform keys operations in Dusk"
+license = "MPL-2.0"
+exclude = [".github/workflows/ci.yml", ".gitignore"]
 
 [dependencies]
 rand_core = "0.5"
