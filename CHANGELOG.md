@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.6.1] - 2021-02-12
+
+### Added
+
+- Add Cargo.toml fields necessary to be published on crates.io
+- Add a short description to README.md
+
 ## [0.6.0] - 2021-02-11
 
 ### Changed

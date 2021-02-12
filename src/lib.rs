@@ -4,9 +4,10 @@
 //
 // Copyright (c) DUSK NETWORK. All rights reserved.
 
-//! ![Build Status](https://travis-ci.com/dusk-network/dusk-pki.svg?branch=master)](https://travis-ci.com/dusk-network/dusk-pki)
-//! ![Repository](https://dusk-network.github.io/dusk-pki/repo-badge.svg)](https://github.com/dusk-network/dusk-pki)
-//! ![Documentation](https://dusk-network.github.io/dusk-pki/badge.svg)](https://dusk-network.github.io/dusk-pki/index.html)
+//! ![Build Status](https://github.com/dusk-network/dusk-pki/workflows/Continuous%20integration/badge.svg)
+//! [![Repository](https://img.shields.io/badge/github-dusk--pki-blueviolet?logo=github)](https://github.com/dusk-network/dusk-pki)
+//! [![Documentation](https://img.shields.io/badge/docs-dusk--pki-blue?logo=rust)](https://docs.rs/dusk-pki/)
+
 //!
 //! # Dusk Public Key Infrastructure
 //!
