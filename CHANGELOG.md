@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.6.2] - 2021-04-06
+
+### Changed
+
+- Update dusk-poseidon to `v0.20` [#42](https://github.com/dusk-network/dusk-pki/issues/42)
+
 ## [0.6.1] - 2021-02-12
 
 ### Added
