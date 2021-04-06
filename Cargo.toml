@@ -1,6 +1,6 @@
 [package]
 name = "dusk-pki"
-version = "0.6.1"
+version = "0.6.2"
 authors = ["zer0 <matteo@dusk.network>", "Victor Lopez <victor@dusk.network>"]
 edition = "2018"
 
@@ -16,7 +16,7 @@ rand_core = "0.5"
 dusk-bytes = "0.1"
 subtle = {version="^2.2.1", default-features=false}
 dusk-jubjub = {version="0.8", default-features=false}
-dusk-poseidon = {version="0.18", default-features = false}
+dusk-poseidon = {version="0.20", default-features = false}
 canonical = {version = "0.5", optional = true}
 canonical_derive = {version = "0.5", optional = true}
 
