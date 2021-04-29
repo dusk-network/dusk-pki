@@ -12,8 +12,6 @@ use crate::{
 use super::secret::SecretSpendKey;
 
 #[cfg(feature = "canon")]
-use canonical::Canon;
-#[cfg(feature = "canon")]
 use canonical_derive::Canon;
 
 use dusk_bytes::{DeserializableSlice, Error, HexDebug, Serializable};

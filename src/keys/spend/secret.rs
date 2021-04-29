@@ -10,8 +10,6 @@ use super::public::PublicSpendKey;
 use super::stealth::StealthAddress;
 
 #[cfg(feature = "canon")]
-use canonical::Canon;
-#[cfg(feature = "canon")]
 use canonical_derive::Canon;
 
 use dusk_bytes::{DeserializableSlice, Error, HexDebug, Serializable};

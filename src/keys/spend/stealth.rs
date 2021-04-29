@@ -5,8 +5,7 @@
 // Copyright (c) DUSK NETWORK. All rights reserved.
 
 use crate::{JubJubAffine, JubJubExtended, PublicKey};
-#[cfg(feature = "canon")]
-use canonical::Canon;
+
 #[cfg(feature = "canon")]
 use canonical_derive::Canon;
 use dusk_bytes::{DeserializableSlice, Error, HexDebug, Serializable};
