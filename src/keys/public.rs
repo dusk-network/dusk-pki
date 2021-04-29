@@ -10,8 +10,6 @@ use dusk_bytes::{Error, HexDebug, Serializable};
 use dusk_jubjub::GENERATOR_EXTENDED;
 
 #[cfg(feature = "canon")]
-use canonical::Canon;
-#[cfg(feature = "canon")]
 use canonical_derive::Canon;
 
 /// Structure repesenting a [`PublicKey`]
