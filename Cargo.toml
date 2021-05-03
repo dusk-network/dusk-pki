@@ -15,8 +15,8 @@ exclude = [".github/workflows/ci.yml", ".gitignore"]
 rand_core = "0.6"
 dusk-bytes = "0.1"
 subtle = {version="^2.2.1", default-features=false}
-dusk-jubjub = {version="0.10.0", default-features=false}
-dusk-poseidon = {version="0.21.0-rc.0", default-features = false}
+dusk-jubjub = {version="0.10", default-features=false}
+dusk-poseidon = {version="0.21.0-rc", default-features = false}
 canonical = {version = "0.6", optional = true}
 canonical_derive = {version = "0.6", optional = true}
 
