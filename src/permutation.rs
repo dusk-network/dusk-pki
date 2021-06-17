@@ -5,12 +5,9 @@
 // Copyright (c) DUSK NETWORK. All rights reserved.
 
 use crate::{JubJubExtended, JubJubScalar};
-
-use dusk_poseidon::sponge;
+use dusk_poseidon::sponge::truncated;
 
 /// Hashes a JubJub's ExtendedPoint into a JubJub's Scalar
 pub fn hash(p: &JubJubExtended) -> JubJubScalar {
-    let h = sponge::hash(&p.to_hash_inputs());
-
-    JubJubScalar::from_raw(h.reduce().0)
+    truncated::hash(&p.to_hash_inputs())
 }
