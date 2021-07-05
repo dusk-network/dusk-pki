@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.7.0] - 2021-07-05
+
 ### Changed
 
 - Update `canonical` from v0.5.0 to v0.6.0 [#44](https://github.com/dusk-network/dusk-pki/issues/44)
