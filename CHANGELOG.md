@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.7.0] - 2021-07-05
+
+### Changed
+
+- Update `canonical` from v0.5.0 to v0.6.0 [#44](https://github.com/dusk-network/dusk-pki/issues/44)
+- Update `rand_core` from v0.5.0 to v0.6.0 [#44](https://github.com/dusk-network/dusk-pki/issues/44)
+- Update `dusk-jubjub` from v0.8.0 to v0.10.0 [#44](https://github.com/dusk-network/dusk-pki/issues/44)
+- Update `dusk-poseidon` from v0.20.0 to v0.21 [#44](https://github.com/dusk-network/dusk-pki/issues/44)
+- Update `rand_core` to not use default features [#48](https://github.com/dusk-network/dusk-pki/issues/48)
+- Change `permutation::hash` to use poseidon's `truncated::hash` [#50](https://github.com/dusk-network/dusk-pki/issues/50)
+
+### Removed
+
+- Remove `rand` from dev-dependencies [#44](https://github.com/dusk-network/dusk-pki/issues/44)
+
 ## [0.6.2] - 2021-04-06
 
 ### Changed

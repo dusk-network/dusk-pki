@@ -9,8 +9,6 @@ use dusk_bytes::{Error, HexDebug, Serializable};
 use rand_core::{CryptoRng, RngCore};
 
 #[cfg(feature = "canon")]
-use canonical::Canon;
-#[cfg(feature = "canon")]
 use canonical_derive::Canon;
 
 #[allow(non_snake_case)]
