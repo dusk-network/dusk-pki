@@ -13,7 +13,7 @@ use dusk_jubjub::GENERATOR_EXTENDED;
 use canonical_derive::Canon;
 
 /// Structure repesenting a [`PublicKey`]
-#[derive(Copy, Clone, PartialEq, HexDebug)]
+#[derive(Copy, Clone, HexDebug)]
 #[cfg_attr(feature = "canon", derive(Canon))]
 pub struct PublicKey(pub(crate) JubJubExtended);
 
@@ -24,6 +24,16 @@ impl From<&SecretKey> for PublicKey {
         PublicKey(public_key)
     }
 }
+
+impl PartialEq for PublicKey {
+    fn eq(&self, other: &Self) -> bool {
+        let z_z_prime = self.0.get_z() * other.0.get_z();
+        self.0.get_x() * z_z_prime == other.0.get_z() * z_z_prime
+            && self.0.get_y() * z_z_prime == other.0.get_y() * z_z_prime
+    }
+}
+
+impl Eq for PublicKey {}
 
 impl From<JubJubExtended> for PublicKey {
     fn from(p: JubJubExtended) -> PublicKey {
@@ -52,5 +62,19 @@ impl Serializable<32> for PublicKey {
 
     fn from_bytes(bytes: &[u8; 32]) -> Result<Self, Error> {
         Ok(Self(JubJubAffine::from_bytes(bytes)?.into()))
+    }
+}
+
+mod tests {
+
+    #[test]
+    fn partial_eq_test() {
+        use super::*;
+        use rand_core::OsRng;
+        let sk1 = SecretKey::random(&mut OsRng);
+        let sk2 = SecretKey::random(&mut OsRng);
+
+        assert_eq!(sk1, sk1);
+        assert_ne!(sk1, sk2)
     }
 }
