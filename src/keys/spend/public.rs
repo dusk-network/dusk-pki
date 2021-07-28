@@ -67,7 +67,7 @@ impl ConstantTimeEq for PublicSpendKey {
 
 impl PartialEq for PublicSpendKey {
     fn eq(&self, other: &Self) -> bool {
-        self.ct_eq(&other).into()
+        self.ct_eq(other).into()
     }
 }
 

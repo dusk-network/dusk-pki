@@ -13,7 +13,7 @@ use dusk_jubjub::GENERATOR_EXTENDED;
 use canonical_derive::Canon;
 
 /// Structure repesenting a [`PublicKey`]
-#[derive(Copy, Clone, PartialEq, HexDebug)]
+#[derive(Copy, Clone, HexDebug)]
 #[cfg_attr(feature = "canon", derive(Canon))]
 pub struct PublicKey(pub(crate) JubJubExtended);
 
@@ -24,6 +24,16 @@ impl From<&SecretKey> for PublicKey {
         PublicKey(public_key)
     }
 }
+
+impl PartialEq for PublicKey {
+    fn eq(&self, other: &Self) -> bool {
+        self.0.get_x() * other.0.get_z() == other.0.get_x() * self.0.get_z()
+            && self.0.get_y() * other.0.get_z()
+                == other.0.get_y() * self.0.get_z()
+    }
+}
+
+impl Eq for PublicKey {}
 
 impl From<JubJubExtended> for PublicKey {
     fn from(p: JubJubExtended) -> PublicKey {
