@@ -34,7 +34,7 @@ impl ConstantTimeEq for ViewKey {
 
 impl PartialEq for ViewKey {
     fn eq(&self, other: &Self) -> bool {
-        self.a == other.a && self.ct_eq(&other).into()
+        self.a == other.a && self.ct_eq(other).into()
     }
 }
 

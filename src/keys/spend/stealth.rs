@@ -43,25 +43,25 @@ impl StealthAddress {
 
     /// Gets the underline `JubJubExtended` point of `pk_r`
     pub fn address(&self) -> &JubJubExtended {
-        &self.pk_r.as_ref()
+        self.pk_r.as_ref()
     }
 }
 
 impl ConstantTimeEq for StealthAddress {
     fn ct_eq(&self, other: &Self) -> Choice {
-        self.pk_r.as_ref().ct_eq(&other.pk_r.as_ref()) & self.R.ct_eq(&other.R)
+        self.pk_r.as_ref().ct_eq(other.pk_r.as_ref()) & self.R.ct_eq(&other.R)
     }
 }
 
 impl PartialEq for StealthAddress {
     fn eq(&self, other: &Self) -> bool {
-        self.ct_eq(&other).into()
+        self.ct_eq(other).into()
     }
 }
 
 impl Ownable for StealthAddress {
     fn stealth_address(&self) -> &StealthAddress {
-        &self
+        self
     }
 }
 

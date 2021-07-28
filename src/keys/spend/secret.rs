@@ -84,7 +84,7 @@ impl ConstantTimeEq for SecretSpendKey {
 
 impl PartialEq for SecretSpendKey {
     fn eq(&self, other: &Self) -> bool {
-        self.ct_eq(&other).into()
+        self.ct_eq(other).into()
     }
 }
 
