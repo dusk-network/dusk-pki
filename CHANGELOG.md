@@ -7,30 +7,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.8.0] - 2021-07-27
+
 ### Changed
 
-- Change `PartialEq` and `Eq` impls for `PublicKey`
+- Change `PartialEq` and `Eq` impls for `PublicKey` [#53]
+- Update `dusk-poseidon` from v0.21.0 to v0.22 [#54]
 
 ## [0.7.0] - 2021-07-05
 
 ### Changed
 
-- Update `canonical` from v0.5.0 to v0.6.0 [#44](https://github.com/dusk-network/dusk-pki/issues/44)
-- Update `rand_core` from v0.5.0 to v0.6.0 [#44](https://github.com/dusk-network/dusk-pki/issues/44)
-- Update `dusk-jubjub` from v0.8.0 to v0.10.0 [#44](https://github.com/dusk-network/dusk-pki/issues/44)
-- Update `dusk-poseidon` from v0.20.0 to v0.21 [#44](https://github.com/dusk-network/dusk-pki/issues/44)
-- Update `rand_core` to not use default features [#48](https://github.com/dusk-network/dusk-pki/issues/48)
-- Change `permutation::hash` to use poseidon's `truncated::hash` [#50](https://github.com/dusk-network/dusk-pki/issues/50)
+- Update `canonical` from v0.5.0 to v0.6.0 [#44]
+- Update `rand_core` from v0.5.0 to v0.6.0 [#44]
+- Update `dusk-jubjub` from v0.8.0 to v0.10.0 [#44]
+- Update `dusk-poseidon` from v0.20.0 to v0.21 [#44]
+- Update `rand_core` to not use default features [#48]
+- Change `permutation::hash` to use poseidon's `truncated::hash` [#50]
 
 ### Removed
 
-- Remove `rand` from dev-dependencies [#44](https://github.com/dusk-network/dusk-pki/issues/44)
+- Remove `rand` from dev-dependencies [#44]
 
 ## [0.6.2] - 2021-04-06
 
 ### Changed
 
-- Update dusk-poseidon to `v0.20` [#42](https://github.com/dusk-network/dusk-pki/issues/42)
+- Update dusk-poseidon to `v0.20` [#42]
 
 ## [0.6.1] - 2021-02-12
 
@@ -43,19 +46,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Update dusk-poseidon to `v0.18` [#38](https://github.com/dusk-network/dusk-pki/issues/38)
+- Update dusk-poseidon to `v0.18` [#38]
 
 ## [0.5.3] - 2021-02-09
 
 ### Changed
 
-- Disable `subtle` default-features flag [#36](https://github.com/dusk-network/dusk-pki/issues/36)
+- Disable `subtle` default-features flag [#36]
 
 ## [0.5.2] - 2021-02-09
 
 ### Changed
 
-- Disable `jubjub` default-features flag [#34](https://github.com/dusk-network/dusk-pki/issues/34)
+- Disable `jubjub` default-features flag [#34]
 
 ## [0.5.1] - 2021-02-01
 
@@ -95,3 +98,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - No-Std compatibility.
+
+
+[#54]: https://github.com/dusk-network/dusk-pki/issues/54
+[#53]: https://github.com/dusk-network/dusk-pki/issues/53
+[#50]: https://github.com/dusk-network/dusk-pki/issues/50
+[#48]: https://github.com/dusk-network/dusk-pki/issues/48
+[#44]: https://github.com/dusk-network/dusk-pki/issues/44
+[#42]: https://github.com/dusk-network/dusk-pki/issues/42
+[#38]: https://github.com/dusk-network/dusk-pki/issues/38
+[#36]: https://github.com/dusk-network/dusk-pki/issues/36
+[#34]: https://github.com/dusk-network/dusk-pki/issues/34
+[unreleased]: https://github.com/dusk-network/dusk-pki/compare/v0.8.0...HEAD
+[0.8.0]: https://github.com/dusk-network/dusk-pki/compare/v0.7.0...v0.8.0
+[0.7.0]: https://github.com/dusk-network/dusk-pki/compare/v0.6.2...v0.7.0
+[0.6.2]: https://github.com/dusk-network/dusk-pki/compare/v0.6.1...v0.6.2
+[0.6.1]: https://github.com/dusk-network/dusk-pki/compare/v0.6.0...v0.6.1
+[0.6.0]: https://github.com/dusk-network/dusk-pki/compare/v0.5.3...v0.6.0
+[0.5.3]: https://github.com/dusk-network/dusk-pki/compare/v0.5.2...v0.5.3
+[0.5.2]: https://github.com/dusk-network/dusk-pki/compare/v0.5.1...v0.5.2
+[0.5.1]: https://github.com/dusk-network/dusk-pki/compare/v0.5.0...v0.5.1
+[0.5.0]: https://github.com/dusk-network/dusk-pki/compare/v0.4.1...v0.5.0
+[0.4.1]: https://github.com/dusk-network/dusk-pki/compare/v0.4.0...v0.4.1
+[0.4.0]: https://github.com/dusk-network/dusk-pki/compare/v0.3.1...v0.4.0
+[0.3.1]: https://github.com/dusk-network/dusk-pki/compare/v0.3.0...v0.3.1
+[0.3.0]: https://github.com/dusk-network/dusk-pki/compare/v0.2.0...v0.3.0
+[0.2.0]: https://github.com/dusk-network/dusk-pki/compare/v0.1.1...v0.2.0
+[0.1.1]: https://github.com/dusk-network/dusk-pki/compare/v0.1.0...v0.1.1
+[0.1.0]: https://github.com/dusk-network/dusk-pki/releases/tag/v0.1.0

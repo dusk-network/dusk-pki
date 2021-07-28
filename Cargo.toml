@@ -1,6 +1,6 @@
 [package]
 name = "dusk-pki"
-version = "0.8.0-rc.0"
+version = "0.8.0"
 authors = ["zer0 <matteo@dusk.network>", "Victor Lopez <victor@dusk.network>"]
 edition = "2018"
 
@@ -14,11 +14,11 @@ exclude = [".github/workflows/ci.yml", ".gitignore"]
 [dependencies]
 rand_core = { version = "0.6", default-features = false }
 dusk-bytes = "0.1"
-subtle = {version="^2.2.1", default-features=false}
-dusk-jubjub = {version="0.10", default-features=false}
-dusk-poseidon = {version="0.22.0-rc", default-features = false}
-canonical = {version = "0.6", optional = true}
-canonical_derive = {version = "0.6", optional = true}
+subtle = { version = "^2.2.1", default-features = false }
+dusk-jubjub = { version = "0.10", default-features = false }
+dusk-poseidon = { version = "0.22", default-features = false }
+canonical = { version = "0.6", optional = true }
+canonical_derive = { version = "0.6", optional = true }
 
 [dev-dependencies]
 sha2 = "0.8"
