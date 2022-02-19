@@ -16,7 +16,7 @@ rand_core = { version = "0.6", default-features = false }
 dusk-bytes = "0.1"
 subtle = { version = "^2.2.1", default-features = false }
 dusk-jubjub = { version = "0.10", default-features = false }
-dusk-poseidon = { version = "0.23.0-rc", default-features = false }
+dusk-poseidon = { version = "0.24.0-rc", default-features = false }
 canonical = { version = "0.6", optional = true }
 canonical_derive = { version = "0.6", optional = true }
 
