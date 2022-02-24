@@ -1,8 +1,8 @@
 [package]
 name = "dusk-pki"
-version = "0.8.0"
+version = "0.10.0-rc.0"
 authors = ["zer0 <matteo@dusk.network>", "Victor Lopez <victor@dusk.network>"]
-edition = "2018"
+edition = "2021"
 
 repository = "https://github.com/dusk-network/dusk-pki"
 keywords = ["cryptography", "crypto", "pki", "bls12-381"]
@@ -15,12 +15,13 @@ exclude = [".github/workflows/ci.yml", ".gitignore"]
 rand_core = { version = "0.6", default-features = false }
 dusk-bytes = "0.1"
 subtle = { version = "^2.2.1", default-features = false }
-dusk-jubjub = { version = "0.10", default-features = false }
-dusk-poseidon = { version = "0.22", default-features = false }
-canonical = { version = "0.6", optional = true }
-canonical_derive = { version = "0.6", optional = true }
+dusk-jubjub = { version = "0.11", default-features = false }
+dusk-poseidon = { version = "0.25.0-rc", default-features = false }
+canonical = { version = "0.7", optional = true }
+canonical_derive = { version = "0.7", optional = true }
 
 [dev-dependencies]
+rand_core = { version = "0.6", default-features = false, features = ["getrandom"] }
 sha2 = "0.8"
 
 [features]
