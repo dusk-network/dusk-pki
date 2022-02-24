@@ -9,7 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Update `dusk-poseidon` to v0.23 [#60]
+- Update `dusk-jubjub` from `0.10` to `0.11`
+- Update `dusk-poseidon` from `0.24.0-rc` to `0.25.0-rc`
+- Update `canonical` from `0.6` to `0.7`
+- Update `canonical_derive` from `0.6` to `0.7`
 
 ## [0.8.0] - 2021-07-27
 
@@ -102,7 +105,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - No-Std compatibility.
-
 
 [#60]: https://github.com/dusk-network/dusk-pki/issues/60
 [#54]: https://github.com/dusk-network/dusk-pki/issues/54
