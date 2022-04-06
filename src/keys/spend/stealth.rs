@@ -31,13 +31,29 @@ pub trait Ownable {
 }
 
 impl StealthAddress {
+    /// Create a stealth address from its internal parts
+    ///
+    /// A stealth address is intended to be generated as the public counterpart
+    /// of a one time secrete spend key. If the user opts to generate the
+    /// stealth address from points, there is no guarantee a secret one time
+    /// spend key counterpart will be known, and this stealth address will
+    /// not provide the required arguments to generate it.
+    ///
+    /// For additional information, check [PublicKey::from_raw_unchecked].
+    pub const fn from_raw_unchecked(
+        R: JubJubExtended,
+        pk_r: PublicKey,
+    ) -> Self {
+        Self { R, pk_r }
+    }
+
     /// Gets the random point `R`
-    pub fn R(&self) -> &JubJubExtended {
+    pub const fn R(&self) -> &JubJubExtended {
         &self.R
     }
 
     /// Gets the `pk_r`
-    pub fn pk_r(&self) -> &PublicKey {
+    pub const fn pk_r(&self) -> &PublicKey {
         &self.pk_r
     }
 

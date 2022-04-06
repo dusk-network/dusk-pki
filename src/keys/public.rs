@@ -64,3 +64,19 @@ impl Serializable<32> for PublicKey {
         Ok(Self(JubJubAffine::from_bytes(bytes)?.into()))
     }
 }
+
+impl PublicKey {
+    /// Create a public key from its internal parts
+    ///
+    /// The public keys are generated from a bijective function that takes a
+    /// secret keys domain. If keys are generated directly from curve
+    /// points, there is no guarantee a secret key exists - in fact, the
+    /// discrete logarithm property will guarantee the secret key cannot be
+    /// extracted from this public key.
+    ///
+    /// If you opt to generate the keys manually, be sure you have its secret
+    /// counterpart - otherwise this key will be of no use.
+    pub const fn from_raw_unchecked(key: JubJubExtended) -> Self {
+        Self(key)
+    }
+}
