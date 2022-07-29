@@ -12,12 +12,16 @@ use dusk_bytes::{DeserializableSlice, Error, HexDebug, Serializable};
 
 use subtle::{Choice, ConstantTimeEq};
 
+#[cfg(feature = "rkyv-impl")]
+use rkyv::{Archive, Deserialize, Serialize};
+
 /// To obfuscate the identity of the participants, we utilizes a Stealth Address
 /// system.
 /// A `StealthAddress` is composed by a one-time public key (`pk_r`, the actual
 // address) and a random point `R`.
 #[derive(HexDebug, Clone, Copy)]
 #[cfg_attr(feature = "canon", derive(Canon))]
+#[cfg_attr(feature = "rkyv-impl", derive(Archive, Serialize, Deserialize))]
 pub struct StealthAddress {
     pub(crate) R: JubJubExtended,
     pub(crate) pk_r: PublicKey,

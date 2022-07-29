@@ -15,11 +15,15 @@ use dusk_bytes::{DeserializableSlice, Error, HexDebug, Serializable};
 use dusk_jubjub::GENERATOR_EXTENDED;
 use subtle::{Choice, ConstantTimeEq};
 
+#[cfg(feature = "rkyv-impl")]
+use rkyv::{Archive, Deserialize, Serialize};
+
 /// Pair of a secret `a` and public `b·G`
 ///
 /// The notes are encrypted against secret a, so this is used to decrypt the
 /// blinding factor and value
 #[derive(Clone, Copy, HexDebug)]
+#[cfg_attr(feature = "rkyv-impl", derive(Archive, Serialize, Deserialize))]
 pub struct ViewKey {
     a: JubJubScalar,
     B: JubJubExtended,

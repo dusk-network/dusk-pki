@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Add `rkyv` implementations behind feature gate [#66]
 - Add `PublicKey::from_raw_unchecked` and `StealthAddress::from_raw_unchecked` [#63]
 
 ### Changed
@@ -111,6 +112,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - No-Std compatibility.
 
+[#66]: https://github.com/dusk-network/dusk-pki/issues/66
 [#63]: https://github.com/dusk-network/dusk-pki/issues/63
 [#60]: https://github.com/dusk-network/dusk-pki/issues/60
 [#54]: https://github.com/dusk-network/dusk-pki/issues/54

@@ -12,6 +12,9 @@ use super::stealth::StealthAddress;
 #[cfg(feature = "canon")]
 use canonical_derive::Canon;
 
+#[cfg(feature = "rkyv-impl")]
+use rkyv::{Archive, Deserialize, Serialize};
+
 use dusk_bytes::{DeserializableSlice, Error, HexDebug, Serializable};
 use dusk_jubjub::GENERATOR_EXTENDED;
 use rand_core::{CryptoRng, RngCore};
@@ -20,6 +23,7 @@ use subtle::{Choice, ConstantTimeEq};
 /// Secret pair of `a` and `b` defining a [`SecretSpendKey`]
 #[derive(Clone, Copy, Eq, HexDebug)]
 #[cfg_attr(feature = "canon", derive(Canon))]
+#[cfg_attr(feature = "rkyv-impl", derive(Archive, Serialize, Deserialize))]
 pub struct SecretSpendKey {
     a: JubJubScalar,
     b: JubJubScalar,

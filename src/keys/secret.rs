@@ -11,10 +11,14 @@ use rand_core::{CryptoRng, RngCore};
 #[cfg(feature = "canon")]
 use canonical_derive::Canon;
 
-#[allow(non_snake_case)]
-#[cfg_attr(feature = "canon", derive(Canon))]
-#[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, HexDebug)]
+#[cfg(feature = "rkyv-impl")]
+use rkyv::{Archive, Deserialize, Serialize};
+
 /// Structure repesenting a secret key
+#[allow(non_snake_case)]
+#[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, HexDebug)]
+#[cfg_attr(feature = "canon", derive(Canon))]
+#[cfg_attr(feature = "rkyv-impl", derive(Archive, Serialize, Deserialize))]
 pub struct SecretKey(pub(crate) JubJubScalar);
 
 impl From<JubJubScalar> for SecretKey {
