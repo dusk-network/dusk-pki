@@ -18,7 +18,11 @@ use rkyv::{Archive, Deserialize, Serialize};
 #[allow(non_snake_case)]
 #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, HexDebug)]
 #[cfg_attr(feature = "canon", derive(Canon))]
-#[cfg_attr(feature = "rkyv-impl", derive(Archive, Serialize, Deserialize))]
+#[cfg_attr(
+    feature = "rkyv-impl",
+    derive(Archive, Serialize, Deserialize),
+    archive_attr(derive(bytecheck::CheckBytes))
+)]
 pub struct SecretKey(pub(crate) JubJubScalar);
 
 impl From<JubJubScalar> for SecretKey {

@@ -18,7 +18,11 @@ use rkyv::{Archive, Deserialize, Serialize};
 /// Structure repesenting a [`PublicKey`]
 #[derive(Copy, Clone, HexDebug)]
 #[cfg_attr(feature = "canon", derive(Canon))]
-#[cfg_attr(feature = "rkyv-impl", derive(Archive, Serialize, Deserialize))]
+#[cfg_attr(
+    feature = "rkyv-impl",
+    derive(Archive, Serialize, Deserialize),
+    archive_attr(derive(bytecheck::CheckBytes))
+)]
 pub struct PublicKey(pub(crate) JubJubExtended);
 
 impl From<&SecretKey> for PublicKey {

@@ -24,7 +24,11 @@ use subtle::{Choice, ConstantTimeEq};
 /// Public pair of `a·G` and `b·G` defining a [`PublicSpendKey`]
 #[derive(HexDebug, Clone, Copy)]
 #[cfg_attr(feature = "canon", derive(Canon))]
-#[cfg_attr(feature = "rkyv-impl", derive(Archive, Serialize, Deserialize))]
+#[cfg_attr(
+    feature = "rkyv-impl",
+    derive(Archive, Serialize, Deserialize),
+    archive_attr(derive(bytecheck::CheckBytes))
+)]
 pub struct PublicSpendKey {
     A: JubJubExtended,
     B: JubJubExtended,
