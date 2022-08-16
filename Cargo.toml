@@ -1,6 +1,6 @@
 [package]
 name = "dusk-pki"
-version = "0.11.0-rc.0"
+version = "0.11.0-rc.1"
 authors = ["zer0 <matteo@dusk.network>", "Victor Lopez <victor@dusk.network>"]
 edition = "2021"
 
@@ -20,6 +20,7 @@ dusk-poseidon = { version = "0.26.0-rc", default-features = false }
 canonical = { version = "0.7", optional = true }
 canonical_derive = { version = "0.7", optional = true }
 rkyv = { version = "0.7", optional = true }
+bytecheck = { version = "0.6", optional = true }
 
 [dev-dependencies]
 rand_core = { version = "0.6", default-features = false, features = ["getrandom"] }
@@ -31,4 +32,4 @@ canon = [
     "canonical_derive",
     "dusk-jubjub/canon"
 ]
-rkyv-impl = ["dusk-jubjub/rkyv-impl", "rkyv"]
+rkyv-impl = ["dusk-jubjub/rkyv-impl", "rkyv", "bytecheck"]

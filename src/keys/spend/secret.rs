@@ -23,7 +23,11 @@ use subtle::{Choice, ConstantTimeEq};
 /// Secret pair of `a` and `b` defining a [`SecretSpendKey`]
 #[derive(Clone, Copy, Eq, HexDebug)]
 #[cfg_attr(feature = "canon", derive(Canon))]
-#[cfg_attr(feature = "rkyv-impl", derive(Archive, Serialize, Deserialize))]
+#[cfg_attr(
+    feature = "rkyv-impl",
+    derive(Archive, Serialize, Deserialize),
+    archive_attr(derive(bytecheck::CheckBytes))
+)]
 pub struct SecretSpendKey {
     a: JubJubScalar,
     b: JubJubScalar,

@@ -23,7 +23,11 @@ use rkyv::{Archive, Deserialize, Serialize};
 /// The notes are encrypted against secret a, so this is used to decrypt the
 /// blinding factor and value
 #[derive(Clone, Copy, HexDebug)]
-#[cfg_attr(feature = "rkyv-impl", derive(Archive, Serialize, Deserialize))]
+#[cfg_attr(
+    feature = "rkyv-impl",
+    derive(Archive, Serialize, Deserialize),
+    archive_attr(derive(bytecheck::CheckBytes))
+)]
 pub struct ViewKey {
     a: JubJubScalar,
     B: JubJubExtended,
