@@ -16,7 +16,7 @@ use canonical_derive::Canon;
 use rkyv::{Archive, Deserialize, Serialize};
 
 /// Structure repesenting a [`PublicKey`]
-#[derive(Copy, Clone, HexDebug)]
+#[derive(Default, Copy, Clone, HexDebug)]
 #[cfg_attr(feature = "canon", derive(Canon))]
 #[cfg_attr(
     feature = "rkyv-impl",
