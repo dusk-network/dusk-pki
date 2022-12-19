@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.11.3] - 2022-12-19
+
+### Added
+
+- Derive `Default` for `PublicKey`
+
 ## [0.11.2] - 2022-10-27
 
 ### Changed
@@ -138,7 +144,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [#38]: https://github.com/dusk-network/dusk-pki/issues/38
 [#36]: https://github.com/dusk-network/dusk-pki/issues/36
 [#34]: https://github.com/dusk-network/dusk-pki/issues/34
-[Unreleased]: https://github.com/dusk-network/dusk-pki/compare/v0.11.2...HEAD
+[Unreleased]: https://github.com/dusk-network/dusk-pki/compare/v0.11.3...HEAD
+[0.11.3]: https://github.com/dusk-network/dusk-pki/compare/v0.11.2...v0.11.3
 [0.11.2]: https://github.com/dusk-network/dusk-pki/compare/v0.11.1...v0.11.2
 [0.11.1]: https://github.com/dusk-network/dusk-pki/compare/v0.11.0...v0.11.1
 [0.11.0]: https://github.com/dusk-network/dusk-pki/compare/v0.8.0...v0.11.0
