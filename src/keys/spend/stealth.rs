@@ -19,7 +19,7 @@ use rkyv::{Archive, Deserialize, Serialize};
 /// system.
 /// A `StealthAddress` is composed by a one-time public key (`pk_r`, the actual
 // address) and a random point `R`.
-#[derive(HexDebug, Clone, Copy)]
+#[derive(Default, HexDebug, Clone, Copy)]
 #[cfg_attr(feature = "canon", derive(Canon))]
 #[cfg_attr(
     feature = "rkyv-impl",
