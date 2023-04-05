@@ -1,6 +1,6 @@
 [package]
 name = "dusk-pki"
-version = "0.11.3"
+version = "0.11.4"
 authors = ["zer0 <matteo@dusk.network>", "Victor Lopez <victor@dusk.network>"]
 edition = "2021"
 
