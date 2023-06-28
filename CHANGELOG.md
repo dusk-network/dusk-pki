@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.12] - 2023-06-28
+
 - Update `dusk-poseidon` from `0.28` to `0.30`
 - Update `rust-toolchain` from `nightly-2022-08-08` to `nightly-2023-05-22`
 
@@ -153,7 +155,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [#38]: https://github.com/dusk-network/dusk-pki/issues/38
 [#36]: https://github.com/dusk-network/dusk-pki/issues/36
 [#34]: https://github.com/dusk-network/dusk-pki/issues/34
-[Unreleased]: https://github.com/dusk-network/dusk-pki/compare/v0.11.4...HEAD
+[Unreleased]: https://github.com/dusk-network/dusk-pki/compare/v0.12...HEAD
+[0.12]: https://github.com/dusk-network/dusk-pki/compare/v0.11.4...v0.12
 [0.11.4]: https://github.com/dusk-network/dusk-pki/compare/v0.11.3...v0.11.4
 [0.11.3]: https://github.com/dusk-network/dusk-pki/compare/v0.11.2...v0.11.3
 [0.11.2]: https://github.com/dusk-network/dusk-pki/compare/v0.11.1...v0.11.2
