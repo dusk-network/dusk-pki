@@ -11,9 +11,6 @@ use crate::{
 
 use super::secret::SecretSpendKey;
 
-#[cfg(feature = "canon")]
-use canonical_derive::Canon;
-
 #[cfg(feature = "rkyv-impl")]
 use rkyv::{Archive, Deserialize, Serialize};
 
@@ -23,7 +20,6 @@ use subtle::{Choice, ConstantTimeEq};
 
 /// Public pair of `a·G` and `b·G` defining a [`PublicSpendKey`]
 #[derive(HexDebug, Clone, Copy)]
-#[cfg_attr(feature = "canon", derive(Canon))]
 #[cfg_attr(
     feature = "rkyv-impl",
     derive(Archive, Serialize, Deserialize),

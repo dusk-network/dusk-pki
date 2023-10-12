@@ -9,15 +9,11 @@ use crate::{JubJubAffine, JubJubExtended};
 use dusk_bytes::{Error, HexDebug, Serializable};
 use dusk_jubjub::GENERATOR_EXTENDED;
 
-#[cfg(feature = "canon")]
-use canonical_derive::Canon;
-
 #[cfg(feature = "rkyv-impl")]
 use rkyv::{Archive, Deserialize, Serialize};
 
 /// Structure repesenting a [`PublicKey`]
 #[derive(Default, Copy, Clone, HexDebug)]
-#[cfg_attr(feature = "canon", derive(Canon))]
 #[cfg_attr(
     feature = "rkyv-impl",
     derive(Archive, Serialize, Deserialize),
@@ -35,9 +31,9 @@ impl From<&SecretKey> for PublicKey {
 
 impl PartialEq for PublicKey {
     fn eq(&self, other: &Self) -> bool {
-        self.0.get_x() * other.0.get_z() == other.0.get_x() * self.0.get_z()
-            && self.0.get_y() * other.0.get_z()
-                == other.0.get_y() * self.0.get_z()
+        self.0.get_u() * other.0.get_z() == other.0.get_u() * self.0.get_z()
+            && self.0.get_v() * other.0.get_z()
+                == other.0.get_v() * self.0.get_z()
     }
 }
 
@@ -69,7 +65,12 @@ impl Serializable<32> for PublicKey {
     }
 
     fn from_bytes(bytes: &[u8; 32]) -> Result<Self, Error> {
-        Ok(Self(JubJubAffine::from_bytes(bytes)?.into()))
+        let public_key: JubJubAffine =
+            match JubJubAffine::from_bytes(*bytes).into() {
+                Some(pk) => pk,
+                None => return Err(Error::InvalidData),
+            };
+        Ok(Self(public_key.into()))
     }
 }
 

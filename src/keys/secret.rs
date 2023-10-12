@@ -8,16 +8,12 @@ use crate::JubJubScalar;
 use dusk_bytes::{Error, HexDebug, Serializable};
 use rand_core::{CryptoRng, RngCore};
 
-#[cfg(feature = "canon")]
-use canonical_derive::Canon;
-
 #[cfg(feature = "rkyv-impl")]
 use rkyv::{Archive, Deserialize, Serialize};
 
 /// Structure repesenting a secret key
 #[allow(non_snake_case)]
 #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, HexDebug)]
-#[cfg_attr(feature = "canon", derive(Canon))]
 #[cfg_attr(
     feature = "rkyv-impl",
     derive(Archive, Serialize, Deserialize),
@@ -64,6 +60,10 @@ impl Serializable<32> for SecretKey {
     }
 
     fn from_bytes(bytes: &[u8; 32]) -> Result<Self, Error> {
-        Ok(Self(JubJubScalar::from_bytes(bytes)?))
+        let secret_key = match JubJubScalar::from_bytes(bytes).into() {
+            Some(sk) => sk,
+            None => return Err(Error::InvalidData),
+        };
+        Ok(Self(secret_key))
     }
 }

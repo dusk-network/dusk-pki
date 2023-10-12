@@ -95,8 +95,8 @@ fn partial_eq_pk() {
         + dusk_jubjub::GENERATOR_EXTENDED * s.4;
 
     // Assert none of the points coordinates actually matches
-    assert_ne!(left.get_x(), right.get_x());
-    assert_ne!(left.get_y(), right.get_y());
+    assert_ne!(left.get_u(), right.get_u());
+    assert_ne!(left.get_v(), right.get_v());
     assert_ne!(left.get_z(), right.get_z());
 
     assert_eq!(JubJubAffine::from(right), JubJubAffine::from(left));

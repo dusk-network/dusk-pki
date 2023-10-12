@@ -7,7 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Update `dusk-poseidon` from `0.30` to `0.31`
+- Update `dusk-jubjub` from `0.12` to `0.13`
+
+### Removed
+
+- Remove `canonical` dependencies and features
+
 ## [0.12.0] - 2023-06-28
+
+### Changed
 
 - Update `dusk-poseidon` from `0.28` to `0.30`
 - Update `rust-toolchain` from `nightly-2022-08-08` to `nightly-2023-05-22`

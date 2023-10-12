@@ -6,8 +6,6 @@
 
 use crate::{JubJubAffine, JubJubExtended, PublicKey};
 
-#[cfg(feature = "canon")]
-use canonical_derive::Canon;
 use dusk_bytes::{DeserializableSlice, Error, HexDebug, Serializable};
 
 use subtle::{Choice, ConstantTimeEq};
@@ -20,7 +18,6 @@ use rkyv::{Archive, Deserialize, Serialize};
 /// A `StealthAddress` is composed by a one-time public key (`pk_r`, the actual
 // address) and a random point `R`.
 #[derive(Default, HexDebug, Clone, Copy)]
-#[cfg_attr(feature = "canon", derive(Canon))]
 #[cfg_attr(
     feature = "rkyv-impl",
     derive(Archive, Serialize, Deserialize),
