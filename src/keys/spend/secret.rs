@@ -9,9 +9,6 @@ use crate::{permutation, JubJubScalar, SecretKey, ViewKey};
 use super::public::PublicSpendKey;
 use super::stealth::StealthAddress;
 
-#[cfg(feature = "canon")]
-use canonical_derive::Canon;
-
 #[cfg(feature = "rkyv-impl")]
 use rkyv::{Archive, Deserialize, Serialize};
 
@@ -22,7 +19,6 @@ use subtle::{Choice, ConstantTimeEq};
 
 /// Secret pair of `a` and `b` defining a [`SecretSpendKey`]
 #[derive(Clone, Copy, Eq, HexDebug)]
-#[cfg_attr(feature = "canon", derive(Canon))]
 #[cfg_attr(
     feature = "rkyv-impl",
     derive(Archive, Serialize, Deserialize),

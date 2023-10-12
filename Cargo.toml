@@ -15,10 +15,8 @@ exclude = [".github/workflows/ci.yml", ".gitignore"]
 rand_core = { version = "0.6", default-features = false }
 dusk-bytes = "0.1"
 subtle = { version = "^2.2.1", default-features = false }
-dusk-jubjub = { version = "0.12", default-features = false }
-dusk-poseidon = { version = "0.30", default-features = false }
-canonical = { version = "0.7", optional = true }
-canonical_derive = { version = "0.7", optional = true }
+dusk-jubjub = { version = "0.13", default-features = false }
+dusk-poseidon = { version = "0.31", default-features = false }
 rkyv = { version = "0.7", optional = true, default-features = false }
 bytecheck = { version = "0.6", optional = true, default-features = false }
 
@@ -27,9 +25,4 @@ rand_core = { version = "0.6", default-features = false, features = ["getrandom"
 sha2 = "0.8"
 
 [features]
-canon = [
-    "canonical",
-    "canonical_derive",
-    "dusk-jubjub/canon"
-]
 rkyv-impl = ["dusk-jubjub/rkyv-impl", "rkyv", "bytecheck"]
