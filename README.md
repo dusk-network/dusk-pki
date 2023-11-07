@@ -1,4 +1,6 @@
-# dusk-pki
+# dusk-pki (Deprecated)
+## This repository is deprecated
+> Functionalities from this repository are now residing in dusk-schnorr and phoenix-core.
 
 ![Build Status](https://github.com/dusk-network/dusk-pki/workflows/Continuous%20integration/badge.svg)
 [![Repository](https://img.shields.io/badge/github-dusk--pki-blueviolet?logo=github)](https://github.com/dusk-network/dusk-pki)
