@@ -13,7 +13,7 @@
 //!
 //! This repository has been created so there's a unique library that holds the
 //! types and functions required to perform keys operations.
-
+#![deprecated = "This crate is deprecated. The code was moved to dusk-schnorr and phoenix-core."]
 #![no_std]
 #![deny(missing_docs)]
 #![allow(non_snake_case)]

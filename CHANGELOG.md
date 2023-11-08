@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Added deprecation notice [#79]
+
 ## [0.13.0] - 2023-10-12
 
 ### Changed
@@ -156,6 +159,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - No-Std compatibility.
 
+[#79]: https://github.com/dusk-network/dusk-pki/issues/79
 [#66]: https://github.com/dusk-network/dusk-pki/issues/66
 [#63]: https://github.com/dusk-network/dusk-pki/issues/63
 [#60]: https://github.com/dusk-network/dusk-pki/issues/60
